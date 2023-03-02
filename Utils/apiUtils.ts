@@ -13,7 +13,8 @@ export async function handleApiCalls(url: string, data: any) {
 
 export function deletePermission(authorId: number, tokenData: any) {
   let permission: boolean = false;
-  if (!tokenData || tokenData.id === authorId || tokenData.rank === "Admin") {
+  if (tokenData === null) return;
+  if (tokenData.id === authorId || tokenData.rank === "Admin") {
     permission = true;
     return permission;
   }

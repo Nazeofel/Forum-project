@@ -12,18 +12,24 @@ export default function Navbar() {
   const [showMenu, setShowMenu] = useAtom(menuAtom);
   const [token, setJWTOKEN] = useAtom(jwtoken);
   const [_, setSearchPosts] = useAtom(atomPosts);
+  const [searchBoolean, setSearchBoolean] = useState<boolean>(false);
   const [data, setData] = useState<any>();
   const debouncedValue = useDebounce(data, 500);
   const pathName = usePathname();
   function handleMenu() {
     setShowMenu(false);
   }
-  /*useEffect(() => {
+  useEffect(() => {
     (async () => {
+      if (!searchBoolean) return;
       const search = await searchIndex(debouncedValue, "posts");
       setSearchPosts(search);
     })();
-  }, [debouncedValue]);*/
+
+    return () => {
+      setSearchBoolean(false);
+    };
+  }, [debouncedValue]);
 
   return (
     <header>
@@ -32,7 +38,10 @@ export default function Navbar() {
           <input
             type="search"
             placeholder="Search for a post"
-            onChange={(e) => setData(e.currentTarget.value)}
+            onChange={(e) => {
+              setSearchBoolean(true);
+              setData(e.currentTarget.value);
+            }}
           />
           <FontAwesomeIcon
             icon={faBars}

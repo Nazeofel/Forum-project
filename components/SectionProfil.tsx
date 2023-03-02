@@ -1,9 +1,10 @@
 import { User } from "@prisma/client";
 import Link from "next/link";
-import { deletePermission, handleDeletePost } from "@/Utils/apiUtils";
+import { deletePermission, encodeURL } from "@/Utils/apiUtils";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faComment, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { splitStr } from "@/Utils/stringFunctions";
+import { useRouter } from "next/router";
 
 /* 
   Make sure to render things based on the rank ! // DONE
@@ -26,6 +27,7 @@ function InfosStyle(props: any) {
 
 function PostStyle(props: any) {
   const posts = Array.from(props.data);
+  const router = useRouter();
   return (
     <>
       {posts.length > 0 ? (
@@ -50,7 +52,14 @@ function PostStyle(props: any) {
                           className="trashIcon"
                           icon={faTrashCan}
                           onClick={async () => {
-                            const req = await handleDeletePost(a.id);
+                            const obj = {
+                              id: a.id,
+                              postId: props.postId,
+                            };
+                            const base64 = await encodeURL(obj);
+                            router.push(
+                              `/action/delete-comment?commentData=${base64}`
+                            );
                           }}
                         />
                       ) : (
@@ -61,7 +70,7 @@ function PostStyle(props: any) {
                   </div>
                   <p>
                     <FontAwesomeIcon icon={faComment} />
-                    {a.comments.length}
+                    {a.hasOwnProperty("comments") ? a.comments.length : "0"}
                   </p>
                 </div>
               </Link>

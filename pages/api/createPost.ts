@@ -2,17 +2,19 @@ import { NextApiRequest, NextApiResponse } from "next";
 require("dotenv").config();
 import { db } from "@/Utils/db.server";
 import { algoliaIndex } from "@/Utils/apiUtils";
+import { User } from "@prisma/client";
 export default async function createPost(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
   const { content, title, id, tags } = req.body;
   const parsedInt = parseInt(id, 10);
-  const user = db.user.findFirst({
+  const user: User = await db.user.findFirst({
     where: {
       id: parsedInt,
     },
   });
+  console.log(user);
   if (user === null) {
     return res.status(400).json({ success: undefined });
   }
@@ -29,7 +31,16 @@ export default async function createPost(
     },
   });
 
-  index.saveObject({ ...c, objectID: c.id }).wait();
+  index
+    .saveObject({
+      ...c,
+      objectID: c.id,
+      author: {
+        name: user.name,
+      },
+      comments: 0,
+    })
+    .wait();
 
   return res
     .status(200)

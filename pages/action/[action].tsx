@@ -80,11 +80,11 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
       break;
     case "delete-comment":
       {
+        if (!commentData) return;
+        const decodedURL = await decodeURL(commentData);
         const req = await handleApiCalls(
           "http://localhost:3000/api/deleteComment",
-          {
-            id: parseInt(id as string, 10),
-          }
+          decodedURL
         );
         if (!req) return;
         serverResponse = await encodeURL(req);

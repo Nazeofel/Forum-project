@@ -194,7 +194,11 @@ export default function DetailedPost(props: {
           )}
 
           <div className="comments-container">
-            <Comments comments={postData.comments} userData={props.tokenData} />
+            <Comments
+              postId={props.datas.id}
+              comments={postData.comments}
+              userData={props.tokenData}
+            />
           </div>
         </>
       )}

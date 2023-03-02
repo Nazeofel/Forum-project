@@ -18,8 +18,6 @@ export function useDebounce(value: any, delay: number) {
 export function useRedirect(path: string, value: number | null) {
   const [timer, setTimer] = useState<any>(value);
   const router = useRouter();
-  console.log("timer", value);
-  console.log("path", path);
   useEffect(() => {
     if (timer === null) return;
     const inter = setInterval(() => {

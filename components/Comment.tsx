@@ -1,8 +1,13 @@
+import { encodeURL } from "@/Utils/apiUtils";
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRouter } from "next/router";
 
-export default function Comments(props: { comments: any; userData: any }) {
+export default function Comments(props: {
+  postId: any;
+  comments: any;
+  userData: any;
+}) {
   const router = useRouter();
   return (
     <>
@@ -29,9 +34,16 @@ export default function Comments(props: { comments: any; userData: any }) {
                     <FontAwesomeIcon
                       className="trashIcon"
                       icon={faTrashCan}
-                      onClick={() =>
-                        router.push(`/action/delete-comment?id=${a.id}`)
-                      }
+                      onClick={async () => {
+                        const obj = {
+                          id: a.id,
+                          postId: props.postId,
+                        };
+                        const base64 = await encodeURL(obj);
+                        router.push(
+                          `/action/delete-comment?commentData=${base64}`
+                        );
+                      }}
                     />
                   ) : (
                     ""

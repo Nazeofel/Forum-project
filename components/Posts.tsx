@@ -22,6 +22,7 @@ export default function Posts({ tokenData }: Props) {
         posts.map((a: any, b: number) => {
           const regex = /([0-9\-]){10}/g;
           const dateReg = a.createdAt.toString().match(regex);
+          console.log(a);
           return (
             <div key={b}>
               <Link href={"/post/" + a.id}>
@@ -35,7 +36,7 @@ export default function Posts({ tokenData }: Props) {
                       }}
                     >
                       <span>
-                        {a.author.name}, {dateReg}
+                        {a.author.name}, {dateReg}: {splitStr(a.name, 20)}
                       </span>
                       {deletePermission(a.authorId, tokenData) ? (
                         <FontAwesomeIcon
@@ -53,7 +54,7 @@ export default function Posts({ tokenData }: Props) {
                   </div>
                   <p>
                     <FontAwesomeIcon icon={faComment} />
-                    {a.comments.length}
+                    {a.hasOwnProperty("comments") ? a.comments.length : "0"}
                   </p>
                 </div>
               </Link>

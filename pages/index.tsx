@@ -11,6 +11,15 @@ interface Props {
   errors: any;
 }
 
+/* TO DO 
+
+
+  Check that algolia "comments" property is correctly updated ! (Delete, Post). 
+
+  RE WORK THE USER PROFILE PAGE ! It's a complete mess 
+
+*/
+
 export async function getServerSideProps(ctx: any) {
   let tokenData: tokenData = await getTokenData(ctx);
   const params = ctx.query;
@@ -45,7 +54,6 @@ export default function Home({ posts, tokenData, errors }: Props) {
   const [page, setPage] = useState(1);
   const [jwt, setJWTOKEN] = useAtom(jwtoken);
   const [emptyArray, setEmptyArray] = useState<null | []>(null);
-  console.log(page);
   const getSearchResultsPage = () => {
     if (posts.length <= 0 || page < 1) {
       setPage(1);
