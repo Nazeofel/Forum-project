@@ -1,0 +1,40 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider          = "postgresql"
+  url               = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+}
+
+model User {
+  id       Int       @id @default(autoincrement())
+  name     String
+  password String
+  email    String
+  comments Comment[]
+  rank String
+  posts    Post[]
+}
+
+model Post {
+  id        Int       @id @default(autoincrement())
+  content   String
+  createdAt DateTime  @default(now()) @db.Timestamp(6)
+  name      String
+  authorId  Int
+  tags String[]
+  comments  Comment[]
+  author    User      @relation(fields: [authorId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now()) @db.Timestamp(6)
+  post_id   Int
+  author_id Int
+  content   String
+  author    User     @relation(fields: [author_id], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  posts     Post     @relation(fields: [post_id], references: [id], onUpdate: Cascade, onDelete: Cascade)
+}

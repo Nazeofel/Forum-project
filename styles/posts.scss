@@ -1,0 +1,60 @@
+@import "colors.scss";
+.posts {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  margin-inline: auto;
+  width: 90%;
+  background-color: #ffffff;
+  box-shadow: $bxs;
+  border-radius: 5px;
+  max-width: 400px;
+  > .posts-infos {
+    display: flex;
+    flex-direction: column;
+    margin-inline: auto;
+    width: 95%;
+    padding-block: 10px;
+    > :nth-child(1) {
+      width: fit-content;
+      font-weight: 700;
+      font-size: 16px;
+      color: #2c2c2c;
+      padding-bottom: 9px;
+    }
+    > :nth-child(2) {
+      word-break: break-all;
+      font-weight: 400;
+      font-size: 16px;
+      color: $greyish;
+    }
+  }
+  > :nth-child(2) {
+    display: flex;
+    margin-inline: auto;
+    gap: 5px;
+    width: 97%;
+    justify-content: flex-end;
+    > svg {
+      width: fit-content;
+    }
+    > svg path {
+      color: $greyish;
+    }
+  }
+}
+
+.comments-container {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  max-height: 410px;
+  overflow-y: scroll;
+
+  padding-bottom: 10px;
+  -ms-overflow-style: none; /* for Internet Explorer, Edge */
+  scrollbar-width: none; /* for Firefox */
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}

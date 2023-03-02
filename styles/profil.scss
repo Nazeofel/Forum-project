@@ -1,0 +1,71 @@
+.profil-container {
+  display: flex;
+  flex-direction: column;
+  & > .profil-infos {
+    width: 90%;
+    margin-inline: auto;
+    & > .infos {
+      display: flex;
+      flex-direction: column;
+      gap: 50px;
+      > .section-style {
+        overflow-y: scroll;
+        cursor: pointer;
+        max-height: 400px;
+        width: 100%;
+        padding-block: 15px;
+        background-color: #d9d9d9;
+        border-radius: 5px;
+        box-shadow: 0px 4px 4px rgb(0 0 0 / 25%);
+        &::-webkit-scrollbar {
+          display: none;
+        }
+        > .content-section {
+          height: 0px;
+          transition: all 500ms;
+          > .content-element {
+            opacity: 0;
+            position: absolute;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 1240px) {
+  .profil-container {
+    & > .profil-infos {
+      & > .infos {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        & > .section-style {
+          width: calc(33% - 50px);
+          > .content-section {
+            height: 0px;
+            transition: all 500ms;
+            > .content-element {
+              opacity: 0;
+              position: absolute;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.content-element-display {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 90%;
+
+  gap: 20px;
+  margin-inline: auto;
+  position: relative;
+  opacity: 1;
+}

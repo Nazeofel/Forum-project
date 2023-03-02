@@ -1,0 +1,90 @@
+@import url("https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;600;800&display=swap");
+@import "colors.scss";
+@import "resets.scss";
+@import "header.scss";
+@import "form.scss";
+@import "posts.scss";
+@import "profil.scss";
+
+body {
+  background-color: rgba(217, 217, 217, 0.7);
+  font-family: "inter";
+}
+
+.post-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding-block: 20px;
+}
+
+/*Utility classes */
+
+svg {
+  width: fit-content;
+}
+
+.trashIcon:hover {
+  cursor: pointer;
+  color: rgba(177, 12, 12, 0.599);
+}
+
+.link-animation {
+  text-decoration: none;
+  width: fit-content;
+  margin-inline: auto;
+  &::after {
+    content: "";
+    display: block;
+    position: relative;
+    height: 1px;
+    background-color: black;
+    width: 100%;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 1s;
+  }
+  &:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+}
+
+.error {
+  color: rgb(255 0 0 / 65%);
+  font-weight: 600;
+}
+.success {
+  color: rgba(17, 215, 50, 0.746);
+  font-weight: 600;
+}
+
+.display-none {
+  animation: fadeoutmenu 500ms ease-in forwards;
+  pointer-events: none;
+  user-select: none;
+}
+
+.display-block {
+  animation: fadeinmenu 500ms ease-in forwards;
+  pointer-events: all;
+  user-select: all;
+}
+
+@keyframes fadeoutmenu {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes fadeinmenu {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
