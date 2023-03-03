@@ -2,7 +2,7 @@ import { fetchWrapper } from "./formUtils";
 const jwt = require("jsonwebtoken");
 import nookies from "nookies";
 import algoliasearch from "algoliasearch";
-
+const env = require("dotenv").config();
 export async function handleApiCalls(url: string, data: any) {
   const req = await fetchWrapper(url, data);
 
@@ -33,10 +33,7 @@ export async function getTokenData(ctx: any) {
 }
 
 export async function algoliaIndex() {
-  const client = algoliasearch(
-    "22HUYWU131",
-    "49b909f5dc8eddbb0080809afa2f0e4f"
-  );
+  const client = algoliasearch(env.API_KEY, env.SEARCH_ONLY_KEY);
   const index = client.initIndex("posts");
   return index;
 }
