@@ -56,15 +56,13 @@ export default function ProfilPage({ userData, tokenData }: Props) {
       comments: userData.comments,
     };
   });
-  const user = [
-    {
-      name: userData.name,
-      email: userData.email,
-      id: userData.id,
-      rank: tokenData === null ? null : tokenData.rank,
-      tokenId: tokenData === null ? null : tokenData.id,
-    },
-  ];
+  const user = {
+    name: userData.name,
+    email: userData.email,
+    id: userData.id,
+    rank: tokenData === null ? null : tokenData.rank,
+    tokenId: tokenData === null ? null : tokenData.id,
+  };
 
   function handleTab(tab: string) {
     return setSection((prev: any) => {
@@ -89,14 +87,14 @@ export default function ProfilPage({ userData, tokenData }: Props) {
         <div className="infos">
           <SectionProfil
             userData={user}
-            data={postsRefined}
+            posts={postsRefined}
             handleTab={() => handleTab("posts")}
             title="posts"
             section={section.posts}
           />
           <SectionProfil
             userData={user}
-            data={userData.comments}
+            comments={userData.comments}
             handleTab={() => handleTab("comments")}
             title="comments"
             section={section.comments}

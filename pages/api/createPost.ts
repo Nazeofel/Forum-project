@@ -34,11 +34,11 @@ export default async function createPost(
   index
     .saveObject({
       ...c,
-      objectID: c.id,
+      comments: 0,
       author: {
         name: user.name,
       },
-      comments: 0,
+      objectID: c.id,
     })
     .wait();
 

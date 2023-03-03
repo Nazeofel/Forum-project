@@ -54,7 +54,9 @@ export default function Posts({ tokenData }: Props) {
                   </div>
                   <p>
                     <FontAwesomeIcon icon={faComment} />
-                    {a.hasOwnProperty("comments") ? a.comments.length : "0"}
+                    {a.hasOwnProperty("comments") && a.comments.length >= 0
+                      ? a.comments.length
+                      : a.comments}
                   </p>
                 </div>
               </Link>

@@ -1,4 +1,4 @@
-import { encodeURL } from "@/Utils/apiUtils";
+import { deletePermission, encodeURL } from "@/Utils/apiUtils";
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRouter } from "next/router";
@@ -26,11 +26,10 @@ export default function Comments(props: {
                   }}
                 >
                   <span>
-                    {a.author.name}, {dateReg}
+                    {a.hasOwnProperty("author") ? `${a.author.name},` : ""}{" "}
+                    {dateReg}
                   </span>
-                  {(props.userData !== null &&
-                    props.userData.id === a.author_id) ||
-                  props.userData.rank === "Admin" ? (
+                  {deletePermission(a.author_id, props.userData) ? (
                     <FontAwesomeIcon
                       className="trashIcon"
                       icon={faTrashCan}

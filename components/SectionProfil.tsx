@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faComment, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { splitStr } from "@/Utils/stringFunctions";
 import { useRouter } from "next/router";
+import Comments from "./Comment";
 
 /* 
   Make sure to render things based on the rank ! // DONE
@@ -19,19 +20,21 @@ interface Props {
 }
 
 function InfosStyle(props: any) {
-  const infosMap = props.data.map((a: User, b: number) => {
+  /*const infosMap = props.data.map((a: User, b: number) => {
     return <p key={b}>{a.name}</p>;
-  });
-  return <>{infosMap}</>;
+  });*/
+  return <>no</>;
 }
 
 function PostStyle(props: any) {
-  const posts = Array.from(props.data);
+  const posts = Array.from(props.posts);
   const router = useRouter();
+  console.log(props.userData[0]);
   return (
     <>
       {posts.length > 0 ? (
         posts.map((a: any, b: number) => {
+          console.log(a);
           const regex = /([0-9\-]){10}/g;
           const dateReg = a.createdAt.toString().match(regex);
           return (
@@ -46,14 +49,16 @@ function PostStyle(props: any) {
                         width: "auto",
                       }}
                     >
-                      <span>{dateReg}</span>
+                      <span>
+                        {a.name}, {dateReg}
+                      </span>
                       {deletePermission(a.authorId, props.userData) ? (
                         <FontAwesomeIcon
                           className="trashIcon"
                           icon={faTrashCan}
                           onClick={async () => {
                             const obj = {
-                              id: a.id,
+                              id: a.authorId,
                               postId: props.postId,
                             };
                             const base64 = await encodeURL(obj);
@@ -87,37 +92,32 @@ function PostStyle(props: any) {
 function CommentStyle(props: any) {
   return (
     <>
-      {props.data.length > 0 ? (
-        props.data.map((a: any, b: number) => {
-          const regex = /([0-9\-]){10}/g;
-          const dateReg = a.createdAt.toString().match(regex);
-          return (
-            <div className="posts" key={b}>
-              <div className="posts-infos">
-                <span>{dateReg}</span>
-                <p>{a.content}</p>
-              </div>
-            </div>
-          );
-        })
-      ) : (
-        <h1 style={{ textAlign: "center" }}>No comments !</h1>
-      )}
+      <Comments
+        postId={props.postId}
+        comments={props.comments}
+        userData={props.userData}
+      />
     </>
   );
 }
 
 export default function SectionProfil(props: any) {
   const section = (title: string) => {
-    switch (props.title) {
+    switch (title) {
       case "infos": {
         return <InfosStyle title={title} data={props.data} />;
       }
       case "comments": {
-        return <CommentStyle data={props.data} />;
+        return (
+          <CommentStyle
+            userData={props.userData}
+            postId={props.postId}
+            comments={props.comments}
+          />
+        );
       }
       case "posts": {
-        return <PostStyle data={props.data} userData={props.userData} />;
+        return <PostStyle posts={props.posts} userData={props.userData} />;
       }
       default:
         break;
