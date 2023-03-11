@@ -45,13 +45,7 @@ export default function Comments({ postId, comments, userData }: Props) {
                     {a.hasOwnProperty("author") ? `${a.author.name},` : ""}{" "}
                     {dateReg}
                   </span>
-                  <div
-                    className="actions"
-                    style={{
-                      display: "flex",
-                      gap: "5px",
-                    }}
-                  >
+                  <div className="actions">
                     {deletePermission(a.author_id, userData) ? (
                       <>
                         {editComment ? (

@@ -141,43 +141,45 @@ export default function DetailedPost({
                 }}
               >
                 <span>{postData.name}</span>
-                {deletePermission(datas.authorId, tokenData) ? (
-                  <>
-                    {editPost ? (
+                <div className="actions">
+                  {deletePermission(datas.authorId, tokenData) ? (
+                    <>
+                      {editPost ? (
+                        <FontAwesomeIcon
+                          className="trashIcon"
+                          icon={faCheck}
+                          onClick={async () => {
+                            handleEditPost();
+                            if (postData.content === postText) {
+                              return;
+                            }
+                            const obj = {
+                              postId: postData.id,
+                              content: postText,
+                            };
+                            const base64 = await encodeURL(obj);
+                            router.push(`/action/edit-post?postData=${base64}`);
+                          }}
+                        />
+                      ) : (
+                        <FontAwesomeIcon
+                          className="trashIcon"
+                          icon={faPencil}
+                          onClick={() => handleEditPost(postData.content)}
+                        />
+                      )}
                       <FontAwesomeIcon
                         className="trashIcon"
-                        icon={faCheck}
-                        onClick={async () => {
-                          handleEditPost();
-                          if (postData.content === postText) {
-                            return;
-                          }
-                          const obj = {
-                            commentId: postData.id,
-                            text: postText,
-                          };
-                          const base64 = await encodeURL(obj);
-                          router.push(`/action/edit-post?postData=${base64}`);
-                        }}
+                        icon={faTrashCan}
+                        onClick={() =>
+                          router.push(`/action/delete-post?id=${datas.id}`)
+                        }
                       />
-                    ) : (
-                      <FontAwesomeIcon
-                        className="trashIcon"
-                        icon={faPencil}
-                        onClick={() => handleEditPost(postData.content)}
-                      />
-                    )}
-                    <FontAwesomeIcon
-                      className="trashIcon"
-                      icon={faTrashCan}
-                      onClick={() =>
-                        router.push(`/action/delete-post?id=${datas.id}`)
-                      }
-                    />
-                  </>
-                ) : (
-                  ""
-                )}
+                    </>
+                  ) : (
+                    ""
+                  )}
+                </div>
               </div>
               {editPost ? (
                 <input
