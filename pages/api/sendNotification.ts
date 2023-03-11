@@ -45,21 +45,28 @@ export default async function sendNotification(
   }
 
   const access_token = await getAccessToken();
-  const reqs = await fetch(
-    `https://fcm.googleapis.com/v1/projects/forum-71f19/messages:send`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json; charset=UTF-8",
-        Authorization: "Bearer " + access_token,
-      },
-      body: JSON.stringify(requestBody),
+  try {
+    const req = await fetch(
+      `https://fcm.googleapis.com/v1/projects/forum-71f19/messages:send`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json; charset=UTF-8",
+          Authorization: "Bearer " + access_token,
+        },
+        body: JSON.stringify(requestBody),
+      }
+    );
+    if (!req.ok) {
+      throw new Error(
+        `Couldn't conctact the notifcation server !. Error code : ${req.status}`
+      );
     }
-  );
-
-  if (!reqs.ok) {
-    res.status(reqs.status).json({ error: "tghtrh" });
-    return;
+    return res.status(200).json({ success: "nice" });
+  } catch (e: any) {
+    if (e instanceof Error) {
+      console.log(e.message);
+    }
+    return res.status(500).json({ error: (e as Error).message });
   }
-  res.status(200).json({ success: "nice" });
 }

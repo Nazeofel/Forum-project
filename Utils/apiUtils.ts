@@ -14,22 +14,21 @@ export async function handleApiCalls(url: string, data: any) {
       },
     });
     if (!req.ok) {
-      throw new Error("failed to contact database ! contact an Admin");
+      throw new Error("failed to contact API EndPoint ! contact an Admin");
     }
     json = await req.json();
   } catch (err) {
     if (err instanceof SyntaxError) {
-      return console.log("There was a Syntax Error", err.message);
+      return console.log("There was a Syntax Error", err.message, err.cause);
     }
     if (err instanceof Error) {
-      return err.message;
+      return console.log(err.message);
+    }
+  } finally {
+    if (json) {
+      return json;
     }
   }
-
-  if (json) {
-    return json;
-  }
-  return false;
 }
 
 export function deletePermission(authorId: number, tokenData: any): Boolean {
