@@ -72,6 +72,16 @@ svg {
   user-select: all;
 }
 
+.pagination-button {
+  border: none;
+  font-weight: bold;
+  color: white;
+  background-color: rgba(44, 44, 44, 0.75);
+  &:focus {
+    outline: 2px solid white;
+  }
+}
+
 @keyframes fadeinmenu {
   0% {
     opacity: 0;

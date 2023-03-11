@@ -29,12 +29,10 @@ function InfosStyle(props: any) {
 function PostStyle(props: any) {
   const posts = Array.from(props.posts);
   const router = useRouter();
-  console.log(props.userData[0]);
   return (
     <>
       {posts.length > 0 ? (
         posts.map((a: any, b: number) => {
-          console.log(a);
           const regex = /([0-9\-]){10}/g;
           const dateReg = a.createdAt.toString().match(regex);
           return (

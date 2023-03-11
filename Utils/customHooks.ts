@@ -20,7 +20,6 @@ export function useRedirect(path: string, value: number | null) {
     path: path,
     timer: value,
   });
-  console.log(redirect.timer);
   const router = useRouter();
   useEffect(() => {
     if (redirect.timer === null) return;

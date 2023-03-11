@@ -61,7 +61,6 @@ export default function Comments({ postId, comments, userData }: Props) {
                             onClick={async () => {
                               handleEditComment();
                               if (a.content === commentText) {
-                                console.log("ça marche");
                                 return;
                               }
                               const obj = {

@@ -21,6 +21,4 @@ if (firebase.apps.length === 0) {
 }
 const messaging = firebase.messaging();
 
-messaging.onBackgroundMessage(async (payload) => {
-  console.log("omg here in the background ?");
-});
+messaging.onBackgroundMessage(async (payload) => {});

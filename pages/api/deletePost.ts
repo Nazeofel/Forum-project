@@ -8,7 +8,6 @@ export default async function deletePost(
   res: NextApiResponse
 ) {
   const { id } = req.body;
-  console.log(id);
   const posts = await db.post.findFirst({
     where: { id: id },
   });

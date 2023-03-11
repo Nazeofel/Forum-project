@@ -42,8 +42,6 @@ export default function ProfilPage({ userData, tokenData }: Props) {
     infos: false,
   });
 
-  console.log(userData);
-
   if (userData === null) {
     return <h1 className="error">USER NOT FOUND !</h1>;
   }

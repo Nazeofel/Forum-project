@@ -40,14 +40,6 @@ header {
           width: min-content;
           color: $greyish;
         }
-        .bell::before {
-          content: "";
-          height: 20px;
-          background-image: attr(data-notif);
-          width: 20px;
-          font-weight: bold;
-          color: red;
-        }
       }
     }
   }
@@ -66,6 +58,7 @@ header {
   height: 300px;
   max-height: 400px;
   overflow-y: scroll;
+  background-color: #d9d9d9;
   > ul {
     display: flex;
     flex-direction: column;
