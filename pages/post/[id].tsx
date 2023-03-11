@@ -13,16 +13,12 @@ import {
 } from "@/Utils/apiUtils";
 import { useRouter } from "next/router";
 import { tokenData } from "@/Utils/interfaces";
-
-type ServerReponse = {
-  success: undefined;
-  error: undefined;
-};
+import { serverResponseObject } from "@/Utils/types";
 
 interface Props {
   datas: any;
   tokenData: tokenData;
-  serverResponse: ServerReponse;
+  serverResponse: serverResponseObject;
 }
 
 export async function getServerSideProps(ctx: GetServerSidePropsContext) {
@@ -59,7 +55,6 @@ export default function DetailedPost({
   const [postData, setPostData] = useState(datas);
   const [clientErrors, setClientErrors] = useState<string | null>(null);
   const router = useRouter();
-  console.log(postData);
   const [data, setData] = useState({
     postId: datas.id,
     userId: tokenData.id,
