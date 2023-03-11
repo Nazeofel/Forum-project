@@ -3,7 +3,11 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import type { GetServerSidePropsContext } from "next/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCheck,
+  faPencil,
+  faTrashCan,
+} from "@fortawesome/free-solid-svg-icons";
 import {
   decodeURL,
   deletePermission,
@@ -54,6 +58,8 @@ export default function DetailedPost({
   const [reFetch, setRefetch] = useState<boolean>(false);
   const [postData, setPostData] = useState(datas);
   const [clientErrors, setClientErrors] = useState<string | null>(null);
+  const [editPost, setEditPost] = useState<boolean>(false);
+  const [postText, setPostText] = useState<string>("");
   const router = useRouter();
   const [data, setData] = useState({
     postId: datas.id,
@@ -62,6 +68,13 @@ export default function DetailedPost({
     receiver: postData.author.deviceID,
     username: tokenData.name,
   });
+
+  function handleEditPost(text?: string) {
+    setEditPost((prev) => !prev);
+    if (!text) return;
+    setPostText(text);
+    return;
+  }
 
   useEffect(() => {
     (async () => {
@@ -129,18 +142,52 @@ export default function DetailedPost({
               >
                 <span>{postData.name}</span>
                 {deletePermission(datas.authorId, tokenData) ? (
-                  <FontAwesomeIcon
-                    className="trashIcon"
-                    icon={faTrashCan}
-                    onClick={() =>
-                      router.push(`/action/delete-post?id=${datas.id}`)
-                    }
-                  />
+                  <>
+                    {editPost ? (
+                      <FontAwesomeIcon
+                        className="trashIcon"
+                        icon={faCheck}
+                        onClick={async () => {
+                          handleEditPost();
+                          if (postData.content === postText) {
+                            return;
+                          }
+                          const obj = {
+                            commentId: postData.id,
+                            text: postText,
+                          };
+                          const base64 = await encodeURL(obj);
+                          router.push(`/action/edit-post?postData=${base64}`);
+                        }}
+                      />
+                    ) : (
+                      <FontAwesomeIcon
+                        className="trashIcon"
+                        icon={faPencil}
+                        onClick={() => handleEditPost(postData.content)}
+                      />
+                    )}
+                    <FontAwesomeIcon
+                      className="trashIcon"
+                      icon={faTrashCan}
+                      onClick={() =>
+                        router.push(`/action/delete-post?id=${datas.id}`)
+                      }
+                    />
+                  </>
                 ) : (
                   ""
                 )}
               </div>
-              <p>{postData.content}</p>
+              {editPost ? (
+                <input
+                  type="text"
+                  value={postText}
+                  onChange={(e) => setPostText(e.target.value)}
+                />
+              ) : (
+                <p>{postData.content}</p>
+              )}
             </div>
           </div>
           {tokenData === null ? (

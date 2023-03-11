@@ -54,3 +54,10 @@
     display: none;
   }
 }
+
+@media screen and (min-width: 1440px) {
+  .post-container {
+    max-height: 650px;
+    height: 650px;
+  }
+}

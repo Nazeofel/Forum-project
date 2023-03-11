@@ -14,7 +14,7 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
   };
   refinedString();
   const action = ctx.params?.action;
-  const { id, formData, commentData } = ctx.query;
+  const { id, formData, commentData, postData } = ctx.query;
   let serverResponse: any = null;
   switch (action as Action) {
     case "delete-post":
@@ -79,6 +79,20 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
         const decodedURL = await decodeURL(commentData);
         const req = await handleApiCalls(
           "http://localhost:3000/api/editComment",
+          decodedURL
+        );
+        if (!req) {
+          return;
+        }
+        serverResponse = await encodeURL(req);
+      }
+      break;
+    case "edit-post":
+      {
+        if (!postData) return;
+        const decodedURL = await decodeURL(postData);
+        const req = await handleApiCalls(
+          "http://localhost:3000/api/editPost",
           decodedURL
         );
         if (!req) {

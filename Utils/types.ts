@@ -10,4 +10,5 @@ export type Action =
   | "update-rank"
   | "sign-in"
   | "sign-up"
-  | "edit-comment";
+  | "edit-comment"
+  | "edit-post";

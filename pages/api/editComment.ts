@@ -12,16 +12,11 @@ export default async function editComment(
     where: { id: commentId },
   });
   if (comment) {
-    const index = await algoliaIndex();
     await db.comment.update({
       where: { id: commentId },
       data: {
         content: text,
       },
-    });
-    index.partialUpdateObject({
-      comments: text,
-      objectID: commentId,
     });
     return res
       .status(200)
