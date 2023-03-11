@@ -1,0 +1,188 @@
+import { getMessaging } from "../node_modules/firebase/messaging/sw";
+import { initializeApp, getApps, getApp } from "../node_modules/firebase/app";
+import { firebaseConfig, setNotification } from "../Utils/apiUtils";
+
+const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
+
+export function initMessagingService() {
+  const messaging = getMessaging();
+  onMessage(messaging, async (payload) => {
+    console.log("message inside the app");
+    await setNotification("+");
+  });
+}
+
+export async function initAppToken() {
+  let token = "";
+  const messaging = getMessaging(app);
+  await getToken(messaging, {
+    vapidKey:
+      "BHx4fqtjgUcgV4KLZAPvCaWOMjGHnoGvIaa8bhOI4-dIBehj-yAIMJ0ZwNjkYoEjQkS5USjE1Zo6XXURY8rIP2M",
+  })
+    .then((currentToken) => {
+      if (currentToken) {
+        console.log("token registered", currentToken);
+        token = currentToken;
+        return;
+      } else {
+        console.log(
+          "No registration token available. Request permission to generate one."
+        );
+        // ...
+      }
+    })
+    .catch((err) => {
+      console.log("An error occurred while retrieving token. ", err);
+    });
+  return token;
+}
+
+
+importScripts(
+  "https://www.gstatic.com/firebasejs/9.10.0/firebase-app-compat.js"
+);
+importScripts(
+  "https://www.gstatic.com/firebasejs/9.10.0/firebase-messaging-compat.js"
+);
+import notif from "../Utils/apiUtils";
+const firebaseConfig = {
+  apiKey: "AIzaSyDlgO_-cPdehrcAd8-dz5a28mZc0aZ_l-A",
+  authDomain: "forum-71f19.firebaseapp.com",
+  projectId: "forum-71f19",
+  storageBucket: "forum-71f19.appspot.com",
+  messagingSenderId: "403564355798",
+  appId: "1:403564355798:web:aeaa7b09efa5248d162977",
+  measurementId: "G-CC20L5EKFF",
+};
+
+if (firebase.apps.length === 0) {
+  firebase.initializeApp(firebaseConfig);
+} else {
+  firebase.app();
+}
+const messaging = firebase.messaging();
+
+messaging.onBackgroundMessage(messaging, (payload) => {
+  console.log("omg here in the background ?");
+  console.log(notif);
+});
++
+
+
+
+export function initMessagingService() {
+  const messaging = getMessaging();
+  onMessage(messaging, async (payload) => {
+    console.log("message inside the app");
+    await setNotification("+");
+  });
+}
+
+export async function initAppToken() {
+  let token = "";
+  const messaging = getMessaging(app);
+  await getToken(messaging, {
+    vapidKey:
+      "BHx4fqtjgUcgV4KLZAPvCaWOMjGHnoGvIaa8bhOI4-dIBehj-yAIMJ0ZwNjkYoEjQkS5USjE1Zo6XXURY8rIP2M",
+  })
+    .then((currentToken) => {
+      if (currentToken) {
+        console.log("token registered", currentToken);
+        token = currentToken;
+        return;
+      } else {
+        console.log(
+          "No registration token available. Request permission to generate one."
+        );
+        // ...
+      }
+    })
+    .catch((err) => {
+      console.log("An error occurred while retrieving token. ", err);
+    });
+  return token;
+}
+
+
+navigator.serviceWorker
+        .register("/firebase-messaging-sw.js", {
+          scope: "/",
+          type: "module",
+        })
+        .then(
+          (registration) => {
+            Notification.requestPermission().then((permission) => {
+              /*if (permission === "granted") {
+                initMessagingService();
+                if (storedFMC) {
+                  return;
+                } else {
+                  initAppToken()
+                    .then((token) => setStoredFMC(token))
+                    .catch((err) => console.log("error :", err));
+                  return;
+                }
+              } else {
+                console.log("no granted");
+                return;
+              }*/
+            });
+          }
+          /*catch(error) => {
+              console.log("Service worker registration failed:", error);
+            }*/
+        );
+    } else {
+      console.log("Service workers are not supported.");
+    }
+
+
+
+
+    <header>
+      <nav>
+        <div>
+          <input
+            type="search"
+            placeholder="Search for a post"
+            
+          />
+          <FontAwesomeIcon
+            className="svg-hamburger"
+            icon={faBars}
+            onClick={() => setShowMenu((prev: any) => !prev)}
+          ></FontAwesomeIcon>
+        </div>
+        <div
+          class="nav-menu"
+        >
+          {token === undefined ? (
+            <>
+              <a href="/signin" >
+                Sign-in
+              </a>
+              <a href="/signup" >
+                Sign-up
+              </a>
+            </>
+          ) : (
+            <>
+              <a href="/" >
+                Home Page !
+              </a>
+              <a href="/createpost" >
+                Create a new post !
+              </a>
+              <a href="/user/">
+                Profil
+              </a>
+              <a
+                href="/logout"
+              >
+                Log-out
+              </a>
+            </>
+          )}
+        </div>
+      </nav>
+    </header>

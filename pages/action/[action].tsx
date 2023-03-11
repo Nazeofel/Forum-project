@@ -1,34 +1,9 @@
-/* 
-/deletePost 
-/createPost 
-/postComment
-/deleteComment
-/signIn
-/signUp
-*/
-
-import {
-  decodeURL,
-  encodeURL,
-  getTokenData,
-  handleApiCalls,
-} from "@/Utils/apiUtils";
-import { tokenData } from "@/Utils/interfaces";
+import { decodeURL, encodeURL, handleApiCalls } from "@/Utils/apiUtils";
+import { Action } from "@/Utils/types";
 import type { GetServerSidePropsContext } from "next/types";
 import nookies from "nookies";
 
-type Action =
-  | "delete-post"
-  | "create-post"
-  | "post-comment"
-  | "delete-comment"
-  | "update-rank"
-  | "sign-in"
-  | "sign-up";
-
 export async function getServerSideProps(ctx: GetServerSidePropsContext) {
-  const tokenData: tokenData = await getTokenData(ctx);
-
   let { referer } = ctx.req.headers;
   const refinedString = () => {
     if (!referer) return;
@@ -50,7 +25,9 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
             id: parseInt(id as string, 10),
           }
         );
-        if (!req) return;
+        if (!req) {
+          return;
+        }
         serverResponse = await encodeURL(req);
       }
       break;
@@ -62,7 +39,9 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
           "http://localhost:3000/api/createPost",
           decodedURL
         );
-        if (!req) return;
+        if (!req) {
+          return;
+        }
         serverResponse = await encodeURL(req);
       }
       break;
@@ -74,7 +53,9 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
           "http://localhost:3000/api/postComment",
           decodedURL
         );
-        if (!req) return;
+        if (!req) {
+          return;
+        }
         serverResponse = await encodeURL(req);
       }
       break;
@@ -86,7 +67,23 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
           "http://localhost:3000/api/deleteComment",
           decodedURL
         );
-        if (!req) return;
+        if (!req) {
+          return;
+        }
+        serverResponse = await encodeURL(req);
+      }
+      break;
+    case "edit-comment":
+      {
+        if (!commentData) return;
+        const decodedURL = await decodeURL(commentData);
+        const req = await handleApiCalls(
+          "http://localhost:3000/api/editComment",
+          decodedURL
+        );
+        if (!req) {
+          return;
+        }
         serverResponse = await encodeURL(req);
       }
       break;
@@ -98,7 +95,9 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
           "http://localhost:3000/api/signUp",
           decodedURL
         );
-        if (!req) return;
+        if (!req) {
+          return;
+        }
         serverResponse = await encodeURL(req);
       }
       break;
@@ -110,7 +109,9 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
           "http://localhost:3000/api/signIn",
           decodedURL
         );
-        if (!req) return;
+        if (!req) {
+          return;
+        }
         nookies.set(ctx, "token", req.token as string, {
           domain: undefined,
           maxAge: 30 * 24 * 60 * 60,
@@ -127,7 +128,7 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
   if (serverResponse !== null) {
     return {
       redirect: {
-        destination: `${referer}?error=${serverResponse}`,
+        destination: `${referer}?serverResponse=${serverResponse}`,
         permanent: false,
       },
     };

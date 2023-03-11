@@ -14,9 +14,11 @@ export default async function createPost(
       id: parsedInt,
     },
   });
-  console.log(user);
   if (user === null) {
-    return res.status(400).json({ success: undefined });
+    return res.status(400).json({
+      success: undefined,
+      error: "an error occured while trying to create the post !",
+    });
   }
   const index = await algoliaIndex();
   const c = await db.post.create({
@@ -42,7 +44,9 @@ export default async function createPost(
     })
     .wait();
 
-  return res
-    .status(200)
-    .json({ success: "Post created successfully !", id: c.id });
+  return res.status(200).json({
+    success: "Post created successfully !",
+    error: undefined,
+    id: c.id,
+  });
 }

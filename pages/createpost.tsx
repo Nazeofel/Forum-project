@@ -5,18 +5,18 @@ import { postInformations } from "@/Utils/zodSchemas";
 import { decodeURL, encodeURL, getTokenData } from "@/Utils/apiUtils";
 import { tokenData } from "@/Utils/interfaces";
 import { useRedirect } from "@/Utils/customHooks";
+import type { GetServerSidePropsContext } from "next/types";
+import { serverResponseObject } from "@/Utils/types";
 
-interface FormData {
-  id: string;
-  content: string;
-  title: string;
-  tags: string;
+interface Props {
+  tokenData: tokenData;
+  serverResponse: serverResponseObject;
 }
 
-export async function getServerSideProps(ctx: any) {
+export async function getServerSideProps(ctx: GetServerSidePropsContext) {
   let tokenData: tokenData = await getTokenData(ctx);
   const params = ctx.query;
-  let errors = {};
+  let serverResponse = {};
   if (tokenData === undefined) {
     return {
       redirect: {
@@ -25,24 +25,24 @@ export async function getServerSideProps(ctx: any) {
       },
     };
   }
-  if (params.error !== undefined) {
-    await decodeURL(params.error);
-    errors = await decodeURL(params.error);
-    console.log(errors);
+  if (params.serverResponse !== undefined) {
+    await decodeURL(params.serverResponse);
+    serverResponse = await decodeURL(params.serverResponse);
   }
   return {
     props: {
       tokenData,
-      errors,
+      serverResponse,
     },
   };
 }
 
-export default function CreatePost({ tokenData, errors }: any) {
-  const [clientErrors, setClientErrors] = useState<any | null>(null);
-  const [serverErrors, _] = useState<any>(errors);
-  const [timer, setTimer] = useRedirect(`/post/${serverErrors.id}`, null);
-  const [formData, setFormData] = useState<FormData>({
+export default function CreatePost({ tokenData, serverResponse }: Props) {
+  const [clientErrors, setClientErrors] = useState<Record<string, any> | null>(
+    null
+  );
+  const [redirect, setRedirect] = useRedirect("", null);
+  const [formData, setFormData] = useState<Record<string, any>>({
     id: tokenData.id,
     content: "",
     title: "",
@@ -50,8 +50,18 @@ export default function CreatePost({ tokenData, errors }: any) {
   });
   const router = useRouter();
   useEffect(() => {
-    if (serverErrors.id) {
-      setTimer(5);
+    if (serverResponse.success) {
+      setRedirect({
+        path: `/post/${serverResponse.id}`,
+        timer: 5,
+      });
+      return;
+    }
+    if (serverResponse.error) {
+      setRedirect({
+        path: "/",
+        timer: 5,
+      });
       return;
     }
   }, []);
@@ -71,11 +81,12 @@ export default function CreatePost({ tokenData, errors }: any) {
   }
   return (
     <div className="form-container">
-      {serverErrors.success !== undefined ? (
+      {serverResponse.success !== undefined ? (
         <>
-          <h1 style={{ color: "green" }}>
-            Post successfully created ! redirection to post page in {timer}
-            {timer <= 1 ? "second" : "seconds"}
+          <h1 className="success">
+            {serverResponse.success} redirection to post page in{" "}
+            {redirect.timer}
+            {redirect.timer <= 1 ? " second" : " seconds"}
           </h1>
         </>
       ) : (
@@ -109,6 +120,17 @@ export default function CreatePost({ tokenData, errors }: any) {
             </label>
             {clientErrors !== null ? (
               <p className="error">{clientErrors.fieldErrors.content}</p>
+            ) : (
+              ""
+            )}
+            {serverResponse.error !== undefined ? (
+              <>
+                <h1 className="error">
+                  {serverResponse.error} ! redirection to home page in{" "}
+                  {redirect.timer}
+                  {redirect.timer <= 1 ? "second" : "seconds"}
+                </h1>
+              </>
             ) : (
               ""
             )}

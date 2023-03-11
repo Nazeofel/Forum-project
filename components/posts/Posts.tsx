@@ -22,7 +22,6 @@ export default function Posts({ tokenData }: Props) {
         posts.map((a: any, b: number) => {
           const regex = /([0-9\-]){10}/g;
           const dateReg = a.createdAt.toString().match(regex);
-          console.log(a);
           return (
             <div key={b}>
               <Link href={"/post/" + a.id}>

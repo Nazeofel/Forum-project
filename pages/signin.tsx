@@ -1,17 +1,17 @@
-import { fetchWrapper, formValidation, handleChange } from "@/Utils/formUtils";
+import { formValidation, handleChange } from "@/Utils/formUtils";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import nookies from "nookies";
-import { useAtom } from "jotai";
-import { jwtoken } from "@/Utils/globalStates";
 import { signInFormInformations } from "@/Utils/zodSchemas";
 import { decodeURL, encodeURL } from "@/Utils/apiUtils";
+import type { GetServerSidePropsContext } from "next/types";
+import { serverResponseObject } from "@/Utils/types";
 
-export async function getServerSideProps(ctx: any) {
+export async function getServerSideProps(ctx: GetServerSidePropsContext) {
   const cookies = nookies.get(ctx);
   const params = ctx.query;
-  let errors = {};
+  let serverResponse = {};
   if (cookies.token !== undefined) {
     return {
       redirect: {
@@ -20,28 +20,30 @@ export async function getServerSideProps(ctx: any) {
       },
     };
   }
-  if (params.error) {
-    await decodeURL(params.error);
-    errors = await decodeURL(params.error);
+  if (params.serverResponse) {
+    await decodeURL(params.serverResponse);
+    serverResponse = await decodeURL(params.serverResponse);
   }
   return {
     props: {
       cookies,
-      errors,
+      serverResponse,
     },
   };
 }
 
-export default function Signin(props: { errors: any }) {
-  const [clientErrors, setClientErrors] = useState<any | null>(null);
-  const [serverErrors, setServerErrors] = useState<any | null>(props.errors);
-  const [formData, setFormData] = useState({
+export default function Signin({ serverResponse }: serverResponseObject) {
+  const [clientErrors, setClientErrors] = useState<Record<string, any> | null>(
+    null
+  );
+  const [formData, setFormData] = useState<{
+    email: string;
+    pass: string;
+  }>({
     email: "",
     pass: "",
   });
-  const [_, setJWTOKEN] = useAtom(jwtoken);
   const router = useRouter();
-  console.log(props.errors);
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
     const signInData = await signInFormInformations(formData);
@@ -72,8 +74,8 @@ export default function Signin(props: { errors: any }) {
         ) : (
           ""
         )}
-        {serverErrors !== null ? (
-          <p className="error">{serverErrors.failure}</p>
+        {serverResponse !== null ? (
+          <p className="error">{serverResponse.error}</p>
         ) : (
           ""
         )}

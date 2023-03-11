@@ -9,12 +9,17 @@ type ResponseData = {
 
 export default async function fetchPost(
   req: NextApiRequest,
-  res: NextApiResponse<ResponseData>
+  res: NextApiResponse<any>
 ) {
   const { id } = req.body;
   const posts = await db.post.findFirst({
     where: { id: id },
     include: {
+      author: {
+        select: {
+          deviceID: true,
+        },
+      },
       comments: {
         include: {
           author: {
@@ -27,8 +32,20 @@ export default async function fetchPost(
       },
     },
   });
+
   if (posts) {
     return res.status(200).json({ posts: posts });
   }
   return res.status(400).json({ posts: {} });
 }
+/* {
+        include: {
+          author: {
+            select: {
+              name: true,
+              id: true,
+              deviceID: true,
+            },
+          },
+        },
+      },*/

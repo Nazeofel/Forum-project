@@ -1,8 +1,7 @@
-import { fetchWrapper } from "@/Utils/formUtils";
-import { Post, Comment } from "@prisma/client";
-import Comments from "@/components/Comment";
+import Comments from "@/components/posts/Comment";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import type { GetServerSidePropsContext } from "next/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import {
@@ -10,48 +9,63 @@ import {
   deletePermission,
   encodeURL,
   getTokenData,
+  handleApiCalls,
 } from "@/Utils/apiUtils";
 import { useRouter } from "next/router";
-interface BasicPost extends Post {
-  comments: Array<Comment>;
+import { tokenData } from "@/Utils/interfaces";
+
+type ServerReponse = {
+  success: undefined;
+  error: undefined;
+};
+
+interface Props {
+  datas: any;
+  tokenData: tokenData;
+  serverResponse: ServerReponse;
 }
 
-export async function getServerSideProps(ctx: any) {
-  let errors = {};
-  let tokenData = await getTokenData(ctx);
+export async function getServerSideProps(ctx: GetServerSidePropsContext) {
+  let serverResponse = {};
+  let tokenData: tokenData = await getTokenData(ctx);
   const params = ctx.query;
   const obj = {
-    id: parseInt(params.id, 10),
+    id: parseInt(params.id as string, 10),
   };
-  const posts = await fetchWrapper(`http://localhost:3000/api/fetchPost`, obj);
-  const datas: Post = await posts.posts;
-  if (params.error !== undefined) {
-    await decodeURL(params.error);
-    errors = await decodeURL(params.error);
+  const posts = await handleApiCalls(
+    `http://localhost:3000/api/fetchPost`,
+    obj
+  );
+  const datas = await posts.posts;
+  if (params.serverResponse) {
+    await decodeURL(params.serverResponse);
+    serverResponse = await decodeURL(params.serverResponse);
   }
   return {
     props: {
       datas,
       tokenData,
-      errors,
+      serverResponse,
     },
   };
 }
 
-export default function DetailedPost(props: {
-  datas: BasicPost;
-  tokenData: any;
-  errors?: any;
-}) {
-  const [reFetch, setRefetch] = useState(false);
-  const [postData, setPostData] = useState(props.datas);
-  const [serverErrors, setServerErrors] = useState<any>(props.errors);
+export default function DetailedPost({
+  datas,
+  tokenData,
+  serverResponse,
+}: Props) {
+  const [reFetch, setRefetch] = useState<boolean>(false);
+  const [postData, setPostData] = useState(datas);
   const [clientErrors, setClientErrors] = useState<string | null>(null);
   const router = useRouter();
+  console.log(postData);
   const [data, setData] = useState({
-    postId: props.datas.id,
-    userId: props.tokenData.id,
+    postId: datas.id,
+    userId: tokenData.id,
     content: "",
+    receiver: postData.author.deviceID,
+    username: tokenData.name,
   });
 
   useEffect(() => {
@@ -60,7 +74,7 @@ export default function DetailedPost(props: {
       const obj = {
         id: postData.id,
       };
-      const req = await fetchWrapper(
+      const req = await handleApiCalls(
         "http://localhost:3000/api/fetchPost",
         obj
       );
@@ -69,24 +83,15 @@ export default function DetailedPost(props: {
       setRefetch(false);
     })();
   }, [reFetch]);
-
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (reFetch) return;
     if (data.content.length <= 0) {
       setClientErrors("Comment shouldn't be empty !");
-      setServerErrors({
-        success: undefined,
-        error: undefined,
-      });
       return;
     }
     if (data.content.length > 244) {
       setClientErrors("Comment should be less than 244 characters !");
-      setServerErrors({
-        success: undefined,
-        error: undefined,
-      });
       return;
     } else {
       const base64 = await encodeURL(data);
@@ -115,7 +120,10 @@ export default function DetailedPost(props: {
         </h1>
       ) : (
         <>
-          <div className="posts" style={{ marginBlock: "40px" }}>
+          <div
+            className="posts"
+            style={{ marginBlock: "40px", marginInline: "auto" }}
+          >
             <div className="posts-infos">
               <div
                 style={{
@@ -125,12 +133,12 @@ export default function DetailedPost(props: {
                 }}
               >
                 <span>{postData.name}</span>
-                {deletePermission(props.datas.authorId, props.tokenData) ? (
+                {deletePermission(datas.authorId, tokenData) ? (
                   <FontAwesomeIcon
                     className="trashIcon"
                     icon={faTrashCan}
                     onClick={() =>
-                      router.push(`/action/delete-post?id=${props.datas.id}`)
+                      router.push(`/action/delete-post?id=${datas.id}`)
                     }
                   />
                 ) : (
@@ -140,7 +148,7 @@ export default function DetailedPost(props: {
               <p>{postData.content}</p>
             </div>
           </div>
-          {props.tokenData === null ? (
+          {tokenData === null ? (
             <h1 style={{ textAlign: "center" }}>
               <Link href="/login" style={{ textDecoration: "underline" }}>
                 Log-in
@@ -157,13 +165,13 @@ export default function DetailedPost(props: {
               ) : (
                 ""
               )}
-              {serverErrors.success !== undefined ? (
-                <p className="success">{serverErrors.success}</p>
+              {serverResponse.success !== undefined ? (
+                <p className="success">{serverResponse.success}</p>
               ) : (
                 ""
               )}
-              {serverErrors.error !== undefined ? (
-                <p className="error">{serverErrors.error}</p>
+              {serverResponse.error !== undefined ? (
+                <p className="error">{serverResponse.error}</p>
               ) : (
                 ""
               )}
@@ -195,9 +203,9 @@ export default function DetailedPost(props: {
 
           <div className="comments-container">
             <Comments
-              postId={props.datas.id}
+              postId={datas.id}
               comments={postData.comments}
-              userData={props.tokenData}
+              userData={tokenData}
             />
           </div>
         </>

@@ -5,6 +5,9 @@ CREATE TABLE "User" (
     "password" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "rank" TEXT NOT NULL,
+    "deviceID" TEXT NOT NULL,
+    "notifications" INTEGER NOT NULL,
+    "profilPicture" TEXT NOT NULL,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );

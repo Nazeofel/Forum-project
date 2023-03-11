@@ -16,6 +16,13 @@ body {
   flex-direction: column;
   gap: 20px;
   padding-block: 20px;
+  > div {
+    align-self: center;
+    > a {
+      width: fit-content;
+      display: block;
+    }
+  }
 }
 
 /*Utility classes */
@@ -59,25 +66,10 @@ svg {
   font-weight: 600;
 }
 
-.display-none {
-  animation: fadeoutmenu 500ms ease-in forwards;
-  pointer-events: none;
-  user-select: none;
-}
-
 .display-block {
   animation: fadeinmenu 500ms ease-in forwards;
   pointer-events: all;
   user-select: all;
-}
-
-@keyframes fadeoutmenu {
-  0% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
 }
 
 @keyframes fadeinmenu {

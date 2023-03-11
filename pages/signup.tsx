@@ -1,15 +1,20 @@
-import { fetchWrapper, formValidation, handleChange } from "@/Utils/formUtils";
+import { formValidation, handleChange } from "@/Utils/formUtils";
 import Link from "next/link";
 import React, { useState } from "react";
 import nookies from "nookies";
 import { signUpFormInformations } from "@/Utils/zodSchemas";
 import { decodeURL, encodeURL } from "@/Utils/apiUtils";
 import router from "next/router";
+import type { GetServerSidePropsContext } from "next/types";
+import { useAtomValue } from "jotai";
+import { localFMC } from "@/Utils/globalStates";
+import { serverResponseObject } from "@/Utils/types";
+import { signUpForm } from "@/Utils/interfaces";
 
-export async function getServerSideProps(ctx: any) {
+export async function getServerSideProps(ctx: GetServerSidePropsContext) {
   const cookies = nookies.get(ctx);
   const params = ctx.query;
-  let errors = {};
+  let serverResponse = {};
   if (cookies.token !== undefined) {
     return {
       redirect: {
@@ -18,27 +23,30 @@ export async function getServerSideProps(ctx: any) {
       },
     };
   }
-  if (params.error) {
-    await decodeURL(params.error);
-    errors = await decodeURL(params.error);
+  if (params.serverResponse) {
+    await decodeURL(params.serverResponse);
+    serverResponse = await decodeURL(params.serverResponse);
   }
   return {
     props: {
       cookies,
-      errors,
+      serverResponse,
     },
   };
 }
 
-export default function Signup(props: { errors: any }) {
-  const [formData, setFormData] = useState({
+export default function Signup({ serverResponse }: serverResponseObject) {
+  const [formData, setFormData] = useState<signUpForm>({
     name: "",
     email: "",
     pass: "",
     confirmPass: "",
+    deviceID: "",
+    notifications: 0,
+    profilPicture: "",
   });
   const [clientErrors, setClientErrors] = useState<any | null>(null);
-  const [serverErrors, setServerErrors] = useState(props.errors);
+  const localFMCValue = useAtomValue(localFMC);
 
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
@@ -49,18 +57,23 @@ export default function Signup(props: { errors: any }) {
       return;
     } else {
       setClientErrors(null);
-      const base64 = await encodeURL(formData);
+      const form = {
+        ...formData,
+        deviceID: localFMCValue,
+      };
+      console.log(form);
+      const base64 = await encodeURL(form);
       router.push(`/action/sign-up?formData=${base64}`);
     }
   }
   return (
     <>
-      {serverErrors.success !== undefined ? (
+      {serverResponse.success !== undefined ? (
         <h1
           style={{ height: "100vh", display: "grid", placeContent: "center" }}
           className="success"
         >
-          Successfully signed up ! sign in{" "}
+          {serverResponse.success}{" "}
           <Link
             className="link-animation"
             style={{
@@ -82,6 +95,11 @@ export default function Signup(props: { errors: any }) {
           >
             Sign-up
           </h1>
+          {serverResponse.error !== undefined ? (
+            <h1 className="error">{serverResponse.error}</h1>
+          ) : (
+            ""
+          )}
           <form onSubmit={handleSubmit}>
             <label htmlFor="name" className="form-label">
               Name:
@@ -91,8 +109,8 @@ export default function Signup(props: { errors: any }) {
             ) : (
               ""
             )}
-            {serverErrors.name !== undefined ? (
-              <p className="error">{serverErrors.name}</p>
+            {serverResponse.name !== undefined ? (
+              <p className="error">{serverResponse.name}</p>
             ) : (
               ""
             )}
@@ -113,8 +131,8 @@ export default function Signup(props: { errors: any }) {
             ) : (
               ""
             )}
-            {serverErrors.email !== undefined ? (
-              <p className="error">{serverErrors.email}</p>
+            {serverResponse.email !== undefined ? (
+              <p className="error">{serverResponse.email}</p>
             ) : (
               ""
             )}

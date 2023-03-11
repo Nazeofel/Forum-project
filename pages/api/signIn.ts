@@ -7,7 +7,7 @@ import { db } from "@/Utils/db.server";
 
 type ResponseData = {
   success?: string;
-  failure?: string;
+  error?: string;
   token?: Object;
   userData?: Object;
 };
@@ -27,10 +27,10 @@ export default async function SignIn(
     where: { email: email },
   });
   if (user === null) {
-    return res.status(400).json({ failure: "the email doesn't exist !" });
+    return res.status(400).json({ error: "the email doesn't exist !" });
   }
   if (user.password !== cryptPass.toString()) {
-    return res.status(400).json({ failure: "the user doesn't exist !" });
+    return res.status(400).json({ error: "the user doesn't exist !" });
   }
   const token = jwt.sign(
     {

@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faComment, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { splitStr } from "@/Utils/stringFunctions";
 import { useRouter } from "next/router";
-import Comments from "./Comment";
+import Comments from "../posts/Comment";
 
 /* 
   Make sure to render things based on the rank ! // DONE

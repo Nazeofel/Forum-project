@@ -1,12 +1,6 @@
 import algoliasearch from "algoliasearch";
 import { z, ZodRawShape } from "zod";
 
-interface r {
-  method: string;
-  body: string;
-  headers: Object;
-}
-
 export const searchIndex = async (
   search: string,
   index: string,
@@ -19,16 +13,6 @@ export const searchIndex = async (
   const clientIndex = searchClient.initIndex(index);
   const i = await clientIndex.search(search, options);
   return i.hits;
-};
-
-export const sendData = (data: any): r => {
-  return {
-    method: "POST",
-    body: JSON.stringify(data),
-    headers: {
-      "Content-type": "application/json",
-    },
-  };
 };
 
 export const handleChange = (
@@ -52,17 +36,30 @@ export const formValidation = async (schema: ZodRawShape, fields: any) => {
   return result;
 };
 
-export const fetchWrapper = async (req: string, data: any) => {
-  const r = await fetch(req, {
-    method: "POST",
-    body: JSON.stringify(data),
-    headers: {
-      "Content-type": "application/json",
-    },
-  });
-  if (r.status !== 200) {
-    let mess = "lol";
+export const fetchWrapper = async (url: string, data: any) => {
+  let json;
+  try {
+    const req = await fetch(url, {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-type": "application/json",
+      },
+    });
+    if (!req.ok) {
+      throw new Error("An error happened");
+    }
+
+    json = await req.json();
+  } catch (e) {
+    if (e instanceof Error) {
+      return console.log("An Error occured", e.message);
+    }
+    if (e instanceof SyntaxError) {
+      return console.log("Syntax error occured", e.message);
+    }
   }
-  const json = await r.json();
-  return json;
+  if (json) {
+    return json;
+  }
 };

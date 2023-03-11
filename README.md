@@ -10,3 +10,4 @@ and learn more about back-end !
 - ORM : **Prisma**
 - Search engine : **Algolia**
 - Language : **Typescript**
+- Services : **Firebase Messaging**

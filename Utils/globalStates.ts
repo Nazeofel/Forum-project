@@ -1,7 +1,11 @@
 import { atom } from "jotai";
 import { atomWithStorage } from "jotai/utils";
+import { NotificationObject } from "./interfaces";
 export const jwtoken = atomWithStorage<any>("token", undefined);
-export const logged = atomWithStorage("logged", false);
-export const errors = atom<any>({});
+export const localFMC = atomWithStorage<any>("FCM", undefined);
+export const notifications = atomWithStorage<NotificationObject[]>(
+  "notifications",
+  []
+);
 export const menuAtom = atom(false);
 export const atomPosts = atom<any[]>([]);

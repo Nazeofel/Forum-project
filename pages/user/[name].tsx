@@ -1,8 +1,9 @@
-import SectionProfil from "@/components/SectionProfil";
+import SectionProfil from "@/components/userProfile/SectionProfil";
 import { getTokenData } from "@/Utils/apiUtils";
 import { fetchWrapper } from "@/Utils/formUtils";
 import { tokenData } from "@/Utils/interfaces";
 import { User, Post, Comment } from "@prisma/client";
+import type { GetServerSidePropsContext } from "next/types";
 import { useState } from "react";
 
 interface UserData extends User {
@@ -11,10 +12,10 @@ interface UserData extends User {
 }
 interface Props {
   userData: UserData;
-  tokenData: any;
+  tokenData: tokenData;
 }
 
-export async function getServerSideProps(ctx: any) {
+export async function getServerSideProps(ctx: GetServerSidePropsContext) {
   let tokenData: tokenData = await getTokenData(ctx);
   const params = ctx.query;
   const payload = {
@@ -40,6 +41,8 @@ export default function ProfilPage({ userData, tokenData }: Props) {
     posts: false,
     infos: false,
   });
+
+  console.log(userData);
 
   if (userData === null) {
     return <h1 className="error">USER NOT FOUND !</h1>;

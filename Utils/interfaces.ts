@@ -1,21 +1,43 @@
-export interface Post {
-  id: number;
-  content: string;
-  createdAt: number;
-  name: string;
-  authorId: number;
-  author: string;
-}
-
-export interface signUpFields {
-  name: string;
-  email: string;
-  pass: string;
-  confirmPass: string;
-}
+import { ZodRawShape } from "zod/lib/types";
+import { notificationStatus } from "./types";
 
 export interface tokenData {
   id: number;
   rank: "Admin" | "User";
   name: string;
+}
+
+export interface NotificationDataObject {
+  content: string;
+  date: string;
+  name: string;
+  seen: notificationStatus;
+}
+
+export interface NotificationObject {
+  data: NotificationDataObject;
+  fcmOptions: {
+    link: string;
+  };
+  from: string;
+  messageId: string;
+  notification: {
+    title: string;
+    body: string;
+  };
+}
+
+export interface ZodCustomParseFunction {
+  fields: Object;
+  schema: ZodRawShape;
+}
+
+export interface signUpForm {
+  name: string;
+  email: string;
+  pass: string;
+  confirmPass: string;
+  deviceID: string;
+  notifications: 0;
+  profilPicture: string;
 }

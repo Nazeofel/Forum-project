@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { ZodCustomParseFunction } from "./interfaces";
 
 function checkTag(str: string[]): boolean {
   let bools = true;
@@ -8,11 +9,13 @@ function checkTag(str: string[]): boolean {
   return bools;
 }
 
-export const postInformations = async (formData: any) => {
+export const postInformations = async (
+  formData: Record<string, any>
+): Promise<ZodCustomParseFunction> => {
   const fields = {
     content: formData.content,
     title: formData.title,
-    tags: formData.tags.split(" ").filter((el: any) => el !== ""),
+    tags: formData.tags.split(" ").filter((el: string) => el !== ""),
   };
   const schema = {
     content: z
@@ -44,7 +47,9 @@ export const postInformations = async (formData: any) => {
   };
 };
 
-export const signInFormInformations = async (formData: any) => {
+export const signInFormInformations = async (
+  formData: Record<string, any>
+): Promise<ZodCustomParseFunction> => {
   const fields = {
     email: formData.email,
     pass: formData.pass,
@@ -71,7 +76,9 @@ export const signInFormInformations = async (formData: any) => {
   };
 };
 
-export const signUpFormInformations = async (formData: any) => {
+export const signUpFormInformations = async (
+  formData: Record<string, any>
+): Promise<ZodCustomParseFunction> => {
   const fields = {
     name: formData.name,
     email: formData.email,

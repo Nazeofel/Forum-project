@@ -1,7 +1,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-export function useDebounce(value: any, delay: number) {
+export function useDebounce(value: any, delay: number): string {
   const [debouncedValue, setDebouncedValue] = useState(value);
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -16,22 +16,31 @@ export function useDebounce(value: any, delay: number) {
 }
 
 export function useRedirect(path: string, value: number | null) {
-  const [timer, setTimer] = useState<any>(value);
+  const [redirect, setRedirect] = useState<any>({
+    path: path,
+    timer: value,
+  });
+  console.log(redirect.timer);
   const router = useRouter();
   useEffect(() => {
-    if (timer === null) return;
+    if (redirect.timer === null) return;
     const inter = setInterval(() => {
-      setTimer((prev: number) => prev - 1);
+      setRedirect((prev: any) => {
+        return {
+          ...prev,
+          timer: prev.timer - 1,
+        };
+      });
     }, 1000);
 
-    if (timer <= 0) {
-      router.push(path);
+    if (redirect.timer <= 0) {
+      router.push(redirect.path);
       return;
     }
     return () => {
       clearInterval(inter);
     };
-  }, [timer]);
+  }, [redirect.timer]);
 
-  return [timer, setTimer];
+  return [redirect, setRedirect];
 }

@@ -13,8 +13,11 @@ model User {
   name     String
   password String
   email    String
+  rank     String
+  deviceID String
+  notifications Int
+  profilPicture String
   comments Comment[]
-  rank String
   posts    Post[]
 }
 
@@ -24,9 +27,9 @@ model Post {
   createdAt DateTime  @default(now()) @db.Timestamp(6)
   name      String
   authorId  Int
-  tags String[]
+  tags      String[]
   comments  Comment[]
-  author    User      @relation(fields: [authorId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  author    User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
 }
 
 model Comment {
@@ -35,6 +38,6 @@ model Comment {
   post_id   Int
   author_id Int
   content   String
-  author    User     @relation(fields: [author_id], references: [id], onUpdate: Cascade, onDelete: Cascade)
-  posts     Post     @relation(fields: [post_id], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  author    User     @relation(fields: [author_id], references: [id], onDelete: Cascade)
+  posts     Post     @relation(fields: [post_id], references: [id], onDelete: Cascade)
 }
