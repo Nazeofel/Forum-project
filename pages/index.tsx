@@ -58,13 +58,12 @@ export default function Home({ posts, tokenData, serverResponse }: Props) {
     const start = (page - 1) * 5;
     const end = page * 5;
     const sliced = posts.slice(start, end);
-    const slicedPred = posts.slice(start + 1, end + 1);
+    const slicedPred = posts.slice(start + 5, end + 5);
     if (slicedPred.length <= 0) {
       setEmptyArray([]);
     } else {
       setEmptyArray(null);
     }
-
     return setSearchPosts(sliced);
   };
 
@@ -82,7 +81,7 @@ export default function Home({ posts, tokenData, serverResponse }: Props) {
       username: username,
       commentContent: commentContent,
       receiver:
-        "dXzDmUKrAPU5y8wxaCtCB3:APA91bHCnmVKNGtrJwzN3YxCayNPf36kYcmQrh75MajmHOvUkgT7PRmESp9YQZWyUD0lMxiMjFXj-OHbfuxZ1H6HG5e2xVvXAkAaecNtCjU3A_wmZYZS-3ORTZ_hl8XbHJcz50cQ-FdI",
+        "dXzDmUKrAPU5y8wxaCtCB3:APA91bEJGsI-h8Cuw1t48RIwd1ZA2USYXGViZj4ZVIU5I-yFCB9YxG-64uJUELQchOW0X2qVvEO_XwF0TYgGBs3vvq70wIjQpKl3fl76P8kwDIgh0ebWMRshANAlrzTy3dDIYlXwS9jb",
     });
   };
 
@@ -98,7 +97,46 @@ export default function Home({ posts, tokenData, serverResponse }: Props) {
     <>
       <div className="post-container">
         <Posts tokenData={tokenData} />
-        <button
+        {serverResponse.success ? <h1>Post correctly deleted !</h1> : ""}
+        {serverResponse.error ? (
+          <h1>An error occured while trying to delete the post !</h1>
+        ) : (
+          ""
+        )}
+      </div>
+      <div
+        className="pagination-container"
+        style={{ display: "flex", justifyContent: "center", gap: "2px" }}
+      >
+        {page <= 1 ? (
+          ""
+        ) : (
+          <button
+            className="pagination-button"
+            onClick={() => setPage((prev) => prev - 1)}
+          >
+            {page - 1}
+          </button>
+        )}
+        <button className="pagination-button">{page}</button>
+        {emptyArray === null ? (
+          <button
+            className="pagination-button"
+            onClick={() => setPage((prev) => prev + 1)}
+          >
+            {" "}
+            {page + 1}
+          </button>
+        ) : (
+          ""
+        )}
+      </div>
+    </>
+  );
+}
+
+/* 
+<button
           onClick={async () => {
             await x("My username is that", "message from inside the client");
           }}
@@ -113,28 +151,5 @@ export default function Home({ posts, tokenData, serverResponse }: Props) {
         >
           outside client
         </button>
-        {serverResponse.success ? <h1>Post correctly deleted !</h1> : ""}
-        {serverResponse.error ? (
-          <h1>An error occured while trying to delete the post !</h1>
-        ) : (
-          ""
-        )}
-      </div>
-      <div
-        className="pagination-container"
-        style={{ display: "flex", justifyContent: "center" }}
-      >
-        <button onClick={() => setPage((prev) => prev - 1)}>{page - 1}</button>
-        <button style={{ backgroundColor: "green" }}>{page}</button>
-        {emptyArray === null ? (
-          <button onClick={() => setPage((prev) => prev + 1)}>
-            {" "}
-            {page + 1}
-          </button>
-        ) : (
-          ""
-        )}
-      </div>
-    </>
-  );
-}
+
+*/
