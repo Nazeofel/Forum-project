@@ -61,7 +61,6 @@ export default function Signup({ serverResponse }: serverResponseObject) {
         ...formData,
         deviceID: localFMCValue,
       };
-      console.log(form);
       const base64 = await encodeURL(form);
       router.push(`/action/sign-up?formData=${base64}`);
     }
