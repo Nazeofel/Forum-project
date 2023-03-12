@@ -1,10 +1,27 @@
 @import "colors.scss";
+
+.post-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding-block: 20px;
+  max-height: 650px;
+  height: 650px;
+  > div {
+    align-self: center;
+    > a {
+      width: fit-content;
+      display: block;
+    }
+  }
+}
 .posts {
   background-color: #ffffff;
   box-shadow: 0px 4px 4px rgb(0 0 0 / 25%);
   border-radius: 5px;
   max-width: 450px;
   align-self: center;
+  width: 450px;
   > .posts-infos {
     display: flex;
     flex-direction: column;
@@ -52,13 +69,6 @@
   scrollbar-width: none; /* for Firefox */
   &::-webkit-scrollbar {
     display: none;
-  }
-}
-
-@media screen and (min-width: 1440px) {
-  .post-container {
-    max-height: 650px;
-    height: 650px;
   }
 }
 

@@ -11,20 +11,6 @@ body {
   font-family: "inter";
 }
 
-.post-container {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  padding-block: 20px;
-  > div {
-    align-self: center;
-    > a {
-      width: fit-content;
-      display: block;
-    }
-  }
-}
-
 /*Utility classes */
 
 svg {
