@@ -17,7 +17,7 @@ export const searchIndex = async (
 
 export const handleChange = (
   event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  setFormData: any
+  setFormData: (args: any) => void
 ) => {
   const { value, name } = event.currentTarget;
   return setFormData((prev: any) => {
