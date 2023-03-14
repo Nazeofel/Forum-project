@@ -14,7 +14,7 @@ export async function handleApiCalls(url: string, data: any) {
       },
     });
     if (!req.ok) {
-      throw new Error("failed to contact API EndPoint ! contact an Admin");
+      throw new Error("Error contacting the database !");
     }
     json = await req.json();
   } catch (err) {
@@ -24,11 +24,9 @@ export async function handleApiCalls(url: string, data: any) {
     if (err instanceof Error) {
       return console.log(err.message);
     }
-  } finally {
-    if (json) {
-      return json;
-    }
   }
+
+  return json;
 }
 
 export function deletePermission(authorId: number, tokenData: any): Boolean {
