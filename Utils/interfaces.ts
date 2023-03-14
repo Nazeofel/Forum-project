@@ -39,5 +39,5 @@ export interface signUpForm {
   confirmPass: string;
   deviceID: string;
   notifications: 0;
-  profilPicture: string;
+  profilPicture: File;
 }
