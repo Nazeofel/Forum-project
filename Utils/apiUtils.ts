@@ -4,7 +4,7 @@ import algoliasearch, { SearchIndex } from "algoliasearch";
 import { tokenData } from "./interfaces";
 
 export async function handleApiCalls(url: string, data: any) {
-  let json;
+  let json = null;
   try {
     const req = await fetch(url, {
       method: "POST",
@@ -13,10 +13,11 @@ export async function handleApiCalls(url: string, data: any) {
         "Content-type": "application/json",
       },
     });
-    if (!req.ok) {
+    if (!req) {
       throw new Error("Error contacting the database !");
     }
-    json = await req.json();
+    const res = await req.json();
+    json = res;
   } catch (err) {
     if (err instanceof SyntaxError) {
       return console.log("There was a Syntax Error", err.message, err.cause);

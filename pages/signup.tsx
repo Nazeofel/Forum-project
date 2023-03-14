@@ -60,7 +60,7 @@ export default function Signup({ serverResponse }: serverResponseObject) {
     } else {
       setClientErrors(null);
       try {
-        const pfp = await fetch("http://localhost:3000/api/testApi", {
+        const pfp = await fetch("http://localhost:3000/api/backBlaze", {
           method: "GET",
         });
         if (!pfp) {
@@ -78,7 +78,7 @@ export default function Signup({ serverResponse }: serverResponseObject) {
         }
         const form = {
           ...formData,
-          profilPicture: upFile.fileID,
+          profilPicture: upFile.fileId,
           deviceID: localFMCValue,
         };
         const base64 = await encodeURL(form);

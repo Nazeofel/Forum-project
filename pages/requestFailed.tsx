@@ -11,8 +11,7 @@ export default function RequestFailed() {
   }, []);
   return (
     <h1 className="error">
-      An error happened while doing the request contact an Admin ! redirection
-      to home page in {redirect.timer}
+      An error happened while contacting the API endpoint ! {redirect.timer}
       {redirect.timer <= 1 ? " second" : " seconds"}
     </h1>
   );

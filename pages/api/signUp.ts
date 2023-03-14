@@ -56,7 +56,7 @@ export default async function signin(
   }
 
   if (deviceID) {
-    await db.user.create({
+    const createUser = await db.user.create({
       data: {
         name: name,
         email: email,
@@ -73,6 +73,14 @@ export default async function signin(
         profilPicture: profilPicture,
       },
     });
+    if (!createUser) {
+      return res.status(400).json({
+        success: undefined,
+        error: "an error occured while trying to create the account !",
+        name: undefined,
+        email: undefined,
+      });
+    }
     return res.status(200).json({
       success: "Successfully signed up ! sign in",
       error: undefined,
