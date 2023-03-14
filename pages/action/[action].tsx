@@ -26,7 +26,7 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
           }
         );
         if (!req) {
-          return;
+          break;
         }
         serverResponse = await encodeURL(req);
       }
@@ -40,7 +40,7 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
           decodedURL
         );
         if (!req) {
-          return;
+          break;
         }
         serverResponse = await encodeURL(req);
       }
@@ -54,7 +54,7 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
           decodedURL
         );
         if (!req) {
-          return;
+          break;
         }
         serverResponse = await encodeURL(req);
       }
@@ -68,7 +68,7 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
           decodedURL
         );
         if (!req) {
-          return;
+          break;
         }
         serverResponse = await encodeURL(req);
       }
@@ -82,7 +82,7 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
           decodedURL
         );
         if (!req) {
-          return;
+          break;
         }
         serverResponse = await encodeURL(req);
       }
@@ -95,8 +95,8 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
           "http://localhost:3000/api/editPost",
           decodedURL
         );
-        if (!req) {
-          return;
+        if (req) {
+          break;
         }
         serverResponse = await encodeURL(req);
       }
@@ -110,7 +110,7 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
           decodedURL
         );
         if (!req) {
-          return;
+          break;
         }
         serverResponse = await encodeURL(req);
       }
@@ -124,7 +124,7 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
           decodedURL
         );
         if (!req) {
-          return;
+          break;
         }
         nookies.set(ctx, "token", req.token as string, {
           domain: undefined,
@@ -149,7 +149,7 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
   } else {
     return {
       redirect: {
-        destination: "/",
+        destination: "/requestFailed",
         permanent: false,
       },
     };
