@@ -10,6 +10,7 @@ import { useAtomValue } from "jotai";
 import { localFMC } from "@/Utils/globalStates";
 import { serverResponseObject } from "@/Utils/types";
 import { signUpForm } from "@/Utils/interfaces";
+import { uploadFile } from "@/Utils/blaze";
 
 export async function getServerSideProps(ctx: GetServerSidePropsContext) {
   const cookies = nookies.get(ctx);
@@ -43,11 +44,12 @@ export default function Signup({ serverResponse }: serverResponseObject) {
     confirmPass: "",
     deviceID: "",
     notifications: 0,
-    profilPicture: "",
+    profilPicture: {} as File,
   });
+
   const [clientErrors, setClientErrors] = useState<any | null>(null);
   const localFMCValue = useAtomValue(localFMC);
-
+  console.log(formData.profilPicture);
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
     const sufInfos = await signUpFormInformations(formData);
@@ -57,12 +59,35 @@ export default function Signup({ serverResponse }: serverResponseObject) {
       return;
     } else {
       setClientErrors(null);
-      const form = {
-        ...formData,
-        deviceID: localFMCValue,
-      };
-      const base64 = await encodeURL(form);
-      router.push(`/action/sign-up?formData=${base64}`);
+      try {
+        const pfp = await fetch("http://localhost:3000/api/testApi", {
+          method: "GET",
+        });
+        if (!pfp) {
+          throw new Error("Error while fetching the upload URL !");
+        }
+        const res = await pfp.json();
+        const upFile = await uploadFile(
+          res.success.uploadUrl,
+          res.success.authorizationToken,
+          formData.profilPicture,
+          formData.name
+        );
+        if (!upFile) {
+          throw new Error("couldn't upload files");
+        }
+        const form = {
+          ...formData,
+          profilPicture: upFile.fileID,
+          deviceID: localFMCValue,
+        };
+        const base64 = await encodeURL(form);
+        router.push(`/action/sign-up?formData=${base64}`);
+      } catch (e) {
+        if (e instanceof Error) {
+          return console.log(e.message);
+        }
+      }
     }
   }
   return (
@@ -181,6 +206,30 @@ export default function Signup({ serverResponse }: serverResponseObject) {
               name="confirmPass"
               placeholder="Confirm Password"
               onChange={(e) => handleChange(e, setFormData)}
+            />
+            {clientErrors !== null ? (
+              <p className="error">{clientErrors.fieldErrors.profilPicture}</p>
+            ) : (
+              ""
+            )}
+
+            <input
+              style={{ marginBottom: "30px" }}
+              type="file"
+              name="profilPicture"
+              onChange={async (e) => {
+                const { files } = e.target;
+                if (!files) return;
+                const filesArray = Array.from(files);
+                for (const file of filesArray) {
+                  setFormData((prev) => {
+                    return {
+                      ...prev,
+                      profilPicture: file,
+                    };
+                  });
+                }
+              }}
             />
             <input type="submit" value="Sign up" className="form-submit" />
           </form>

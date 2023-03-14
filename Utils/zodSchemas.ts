@@ -84,7 +84,9 @@ export const signUpFormInformations = async (
     email: formData.email,
     pass: formData.pass,
     confirmPass: formData.confirmPass,
+    profilPicture: formData.profilPicture,
   };
+  const ARRAY_TYPES = ["image/jpg", "image/jpeg", "image/png"];
   const schema = {
     name: z
       .string({
@@ -110,6 +112,14 @@ export const signUpFormInformations = async (
     confirmPass: z.string().refine((val) => val === formData.pass, {
       message: "Passwords should match",
     }),
+    profilPicture: z
+      .instanceof(File)
+      .refine((f) => f.size <= 50000, {
+        message: "File size too big ! max 5mo.",
+      })
+      .refine((f) => ARRAY_TYPES.includes(f.type), {
+        message: "Only JPG, PNG, JPEG images format are supported",
+      }),
   };
   return {
     fields,

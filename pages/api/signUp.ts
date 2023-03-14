@@ -1,7 +1,6 @@
 import { User } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
 import { scryptAsync } from "@noble/hashes/scrypt";
-
 import { db } from "@/Utils/db.server";
 
 type ResponseData = {
@@ -23,7 +22,6 @@ export default async function signin(
     p: 1,
     dkLen: 32,
   });
-
   const emailTaken: User | null = await db.user.findFirst({
     where: { email: email },
   });
@@ -82,7 +80,7 @@ export default async function signin(
       email: undefined,
     });
   } else {
-    return res.status(200).json({
+    return res.status(400).json({
       success: undefined,
       error: "an error occured while trying to create the account !",
       name: undefined,
