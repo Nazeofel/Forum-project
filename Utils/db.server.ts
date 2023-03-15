@@ -15,4 +15,4 @@ if (process.env.NODE_ENV === "production") {
   primsa = globalWithPrisma.prisma;
 }
 
-export { primsa };
+export { primsa as db };
