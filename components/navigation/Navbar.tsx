@@ -14,7 +14,7 @@ import { getMessaging, onMessage } from "firebase/messaging";
 import { NotificationObject } from "@/Utils/interfaces";
 import NotificationBox from "./NotificationBox";
 import NavigationMenu from "./NavigationMenu";
-import Image from "next/image";
+import BellComponent from "./BellComponent";
 
 export default function Navbar() {
   const [showMenu, setShowMenu] = useAtom(menuAtom);
@@ -22,31 +22,14 @@ export default function Navbar() {
   const [_, setSearchPosts] = useAtom(atomPosts);
   const [searchBoolean, setSearchBoolean] = useState<boolean>(false);
   const [searchBarInput, setSearchBarInput] = useState<string>();
-  const [showNotification, setShowNotification] = useState<boolean>(false);
   const [localStorageNotifications, setLocalStorageNotifications] =
     useAtom(notifications);
+  const [showNotification, setShowNotification] = useState<boolean>(false);
   const debouncedValue = useDebounce(searchBarInput, 500);
-  const unseenNotification = localStorageNotifications.filter(
-    (notif) => notif.data.seen !== "seen"
-  );
   function handleMenu() {
     setShowMenu(false);
   }
-  function handleInBoxNotifications() {
-    const seenNotif = localStorageNotifications.map(
-      (a: NotificationObject, _: number): NotificationObject => {
-        return {
-          ...a,
-          data: {
-            ...a.data,
-            seen: "seen",
-          },
-        };
-      }
-    );
-    setLocalStorageNotifications(seenNotif);
-    setShowNotification((prev: boolean) => !prev);
-  }
+
   useEffect(() => {
     (async () => {
       const perm = await navigator.permissions.query({ name: "notifications" });
@@ -73,76 +56,66 @@ export default function Navbar() {
     };
   }, [debouncedValue]);
 
+  function handleInBoxNotifications() {
+    const seenNotif = localStorageNotifications.map(
+      (a: NotificationObject, _: number): NotificationObject => {
+        return {
+          ...a,
+          data: {
+            ...a.data,
+            seen: "seen",
+          },
+        };
+      }
+    );
+    setLocalStorageNotifications(seenNotif);
+    setShowNotification((prev: boolean) => !prev);
+  }
+
   return (
     <>
       <header>
         <nav>
-          <div>
-            <input
-              type="search"
-              placeholder="Search for a post"
-              onChange={(e) => {
-                setSearchBoolean(true);
-                setSearchBarInput(e.currentTarget.value);
-              }}
+          <input
+            type="search"
+            placeholder="Search for a post"
+            onChange={(e) => {
+              setSearchBoolean(true);
+              setSearchBarInput(e.currentTarget.value);
+            }}
+          />
+          <NavigationMenu
+            showMenu={showMenu}
+            handleMenu={handleMenu}
+            token={token}
+            setJWTOKEN={setJWTOKEN}
+          />
+          {token === undefined ? (
+            ""
+          ) : (
+            <BellComponent
+              handleInBoxNotifications={handleInBoxNotifications}
+              localStorageNotifications={localStorageNotifications}
             />
-            <div className="nav-icons">
-              {token === undefined ? (
-                ""
-              ) : (
-                <div>
-                  <div
-                    className="bell"
-                    style={{ display: "block", position: "relative" }}
-                  >
-                    {unseenNotification.length >= 1 ? (
-                      <Image
-                        src="/circle-moon-svgrepo-com.svg"
-                        alt="circle-moon-svgrepo-com.svg"
-                        width={10}
-                        height={10}
-                        style={{
-                          position: "absolute",
-                          zIndex: "20",
-                          right: "10px",
-                        }}
-                      />
-                    ) : (
-                      ""
-                    )}
-                    <FontAwesomeIcon
-                      className="svg-style bell"
-                      style={{ position: "relative", zIndex: "0" }}
-                      icon={
-                        localStorageNotifications.length > 0
-                          ? faBell
-                          : faBellSlash
-                      }
-                      onClick={handleInBoxNotifications}
-                    ></FontAwesomeIcon>
-                  </div>
-                </div>
-              )}
-              <FontAwesomeIcon
-                className="svg-style"
-                icon={faBars}
-                onClick={() => setShowMenu((prev: boolean) => !prev)}
-              ></FontAwesomeIcon>
-            </div>
-          </div>
+          )}
+          <FontAwesomeIcon
+            className="svg-style  hamburger-menu"
+            icon={faBars}
+            onClick={() => setShowMenu((prev: boolean) => !prev)}
+          ></FontAwesomeIcon>
+          <NotificationBox
+            showNotification={showNotification}
+            locaStorageNotifications={localStorageNotifications}
+            setLocalStorageNotifications={setLocalStorageNotifications}
+          />
         </nav>
       </header>
-      <NotificationBox
-        showNotification={showNotification}
-        locaStorageNotifications={localStorageNotifications}
-        setLocalStorageNotifications={setLocalStorageNotifications}
-      />
-      <NavigationMenu
-        showMenu={showMenu}
-        handleMenu={handleMenu}
-        token={token}
-        setJWTOKEN={setJWTOKEN}
-      />
     </>
   );
 }
+
+/* <NotificationBox
+            showNotification={showNotification}
+            locaStorageNotifications={localStorageNotifications}
+            setLocalStorageNotifications={setLocalStorageNotifications}
+          />*/

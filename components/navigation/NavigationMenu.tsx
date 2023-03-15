@@ -18,25 +18,34 @@ export default function NavigationMenu({
     <div className={`nav-menu ${showMenu ? "display-block" : "display-none"}`}>
       {token === undefined ? (
         <>
-          <Link href="/signin" onClick={handleMenu}>
+          <Link className="link-animation" href="/signin" onClick={handleMenu}>
             Sign-in
           </Link>
-          <Link href="/signup" onClick={handleMenu}>
+          <Link className="link-animation" href="/signup" onClick={handleMenu}>
             Sign-up
           </Link>
         </>
       ) : (
         <>
-          <Link href="/" onClick={handleMenu}>
-            Home Page !
+          <Link className="link-animation" href="/" onClick={handleMenu}>
+            Home Page
           </Link>
-          <Link href="/createpost" onClick={handleMenu}>
-            Create a new post !
+          <Link
+            className="link-animation"
+            href="/createpost"
+            onClick={handleMenu}
+          >
+            Create a new post
           </Link>
-          <Link href={"/user/" + token.name} onClick={handleMenu}>
+          <Link
+            className="link-animation"
+            href={"/user/" + token.name}
+            onClick={handleMenu}
+          >
             Profil
           </Link>
           <Link
+            className="link-animation"
             href="/logout"
             onClick={() => {
               handleMenu();
