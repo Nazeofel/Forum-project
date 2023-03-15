@@ -9,7 +9,7 @@ export default async function createPost(
 ) {
   const { content, title, id, tags } = req.body;
   const parsedInt = parseInt(id, 10);
-  const user: User = await db.user.findFirst({
+  const user: User | null = await db.user.findFirst({
     where: {
       id: parsedInt,
     },

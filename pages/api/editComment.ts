@@ -1,7 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { undefined } from "zod";
 import { db } from "@/Utils/db.server";
-import { algoliaIndex } from "@/Utils/apiUtils";
 
 export default async function editComment(
   req: NextApiRequest,

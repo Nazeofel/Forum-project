@@ -3,7 +3,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { db } from "@/Utils/db.server";
 
 type ResponseData = {
-  userInfo: User | undefined;
+  userInfo: User | null;
 };
 
 export default async function updateDeviceID(
@@ -11,7 +11,7 @@ export default async function updateDeviceID(
   res: NextApiResponse<ResponseData>
 ) {
   const { id, deviceID } = req.body;
-  const user: User = await db.user.findFirst({
+  const user: User | null = await db.user.findFirst({
     where: {
       id: id,
     },
@@ -29,5 +29,5 @@ export default async function updateDeviceID(
     }
     return res.status(200).json({ userInfo: user });
   }
-  return res.status(400).json({ userInfo: undefined });
+  return res.status(400).json({ userInfo: null });
 }
