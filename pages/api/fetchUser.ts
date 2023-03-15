@@ -19,7 +19,7 @@ export default async function fetchUser(
       posts: true,
     },
   });
-  if (user === null) {
+  if (!user) {
     return res.status(400).json({ userInfos: user });
   }
   return res.status(200).json({ userInfos: user, token: token });

@@ -60,22 +60,19 @@ export default function Signup({ serverResponse }: serverResponseObject) {
     } else {
       setClientErrors(null);
       try {
-        const pfp = await fetch("http://localhost:3000/api/backBlaze", {
+        const req = await fetch("http://localhost:3000/api/backBlaze", {
           method: "GET",
         });
-        if (!pfp) {
+        if (!req.ok) {
           throw new Error("Error while fetching the upload URL !");
         }
-        const res = await pfp.json();
+        const res = await req.json();
         const upFile = await uploadFile(
           res.success.uploadUrl,
           res.success.authorizationToken,
           formData.profilPicture,
           formData.name
         );
-        if (!upFile) {
-          throw new Error("couldn't upload files");
-        }
         const form = {
           ...formData,
           profilPicture: upFile.fileId,

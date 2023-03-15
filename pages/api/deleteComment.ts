@@ -11,21 +11,22 @@ export default async function deleteComment(
   const posts = await db.comment.findFirst({
     where: { id: id },
   });
-  if (posts) {
-    await db.comment.delete({ where: { id: id } });
-    const index = await algoliaIndex();
-    index.partialUpdateObject({
-      comments: {
-        _operation: "Decrement",
-        value: 1,
-      },
-      objectID: postId,
-    });
+  const deleteComment = await db.comment.delete({ where: { id: id } });
+  if (!posts || !deleteComment) {
     return res
-      .status(200)
-      .json({ success: "comment sucessfully deleted", error: undefined });
+      .status(400)
+      .json({ success: undefined, error: "comment not sucessfully deleted" });
   }
+
+  const index = await algoliaIndex();
+  index.partialUpdateObject({
+    comments: {
+      _operation: "Decrement",
+      value: 1,
+    },
+    objectID: postId,
+  });
   return res
-    .status(400)
-    .json({ success: undefined, error: "comment not sucessfully deleted" });
+    .status(200)
+    .json({ success: "comment sucessfully deleted", error: undefined });
 }

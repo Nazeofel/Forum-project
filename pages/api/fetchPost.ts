@@ -1,11 +1,6 @@
-import { Post } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
 
 import { db } from "@/Utils/db.server";
-
-type ResponseData = {
-  posts: Partial<Post>;
-};
 
 export default async function fetchPost(
   req: NextApiRequest,
@@ -38,14 +33,3 @@ export default async function fetchPost(
   }
   return res.status(400).json({ posts: {} });
 }
-/* {
-        include: {
-          author: {
-            select: {
-              name: true,
-              id: true,
-              deviceID: true,
-            },
-          },
-        },
-      },*/

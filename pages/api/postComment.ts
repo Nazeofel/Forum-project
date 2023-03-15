@@ -12,14 +12,14 @@ export default async function postComment(
 ) {
   const { content, postId, userId, username, receiver, date } = req.body;
 
-  await db.comment.create({
+  const comment = await db.comment.create({
     data: {
       content: content,
       author_id: userId,
       post_id: postId,
     },
   });
-  if (res.statusCode !== 200) {
+  if (!comment) {
     return res.status(400).json({
       success: undefined,
       error: "An error occured while posting the comment !",

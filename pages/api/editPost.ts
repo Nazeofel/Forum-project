@@ -11,23 +11,23 @@ export default async function editComment(
   const post = await db.post.findFirst({
     where: { id: postId },
   });
-  if (post) {
-    const index = await algoliaIndex();
-    await db.post.update({
-      where: { id: postId },
-      data: {
-        content: content,
-      },
-    });
-    index.partialUpdateObject({
-      content: content,
-      objectID: postId,
-    });
+  if (!post) {
     return res
-      .status(200)
-      .json({ success: "post sucessfully updated", error: undefined });
+      .status(400)
+      .json({ success: undefined, error: "post not sucessfully updated" });
   }
+  const index = await algoliaIndex();
+  await db.post.update({
+    where: { id: postId },
+    data: {
+      content: content,
+    },
+  });
+  index.partialUpdateObject({
+    content: content,
+    objectID: postId,
+  });
   return res
-    .status(400)
-    .json({ success: undefined, error: "post not sucessfully updated" });
+    .status(200)
+    .json({ success: "post sucessfully updated", error: undefined });
 }

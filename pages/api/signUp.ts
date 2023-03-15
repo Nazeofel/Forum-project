@@ -55,39 +55,25 @@ export default async function signin(
     });
   }
 
-  if (deviceID) {
-    const createUser = await db.user.create({
-      data: {
-        name: name,
-        email: email,
-        password: cryptPass.toString(),
-        posts: {
-          create: [],
-        },
-        comments: {
-          create: [],
-        },
-        rank: "User",
-        deviceID: deviceID,
-        notifications: notifications,
-        profilPicture: profilPicture,
+  const createUser = await db.user.create({
+    data: {
+      name: name,
+      email: email,
+      password: cryptPass.toString(),
+      posts: {
+        create: [],
       },
-    });
-    if (!createUser) {
-      return res.status(400).json({
-        success: undefined,
-        error: "an error occured while trying to create the account !",
-        name: undefined,
-        email: undefined,
-      });
-    }
-    return res.status(200).json({
-      success: "Successfully signed up ! sign in",
-      error: undefined,
-      name: undefined,
-      email: undefined,
-    });
-  } else {
+      comments: {
+        create: [],
+      },
+      rank: "User",
+      deviceID: deviceID,
+      notifications: notifications,
+      profilPicture: profilPicture,
+    },
+  });
+
+  if (!deviceID || !createUser) {
     return res.status(400).json({
       success: undefined,
       error: "an error occured while trying to create the account !",
@@ -95,4 +81,11 @@ export default async function signin(
       email: undefined,
     });
   }
+
+  return res.status(200).json({
+    success: "Successfully signed up ! sign in",
+    error: undefined,
+    name: undefined,
+    email: undefined,
+  });
 }

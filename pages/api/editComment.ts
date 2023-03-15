@@ -11,18 +11,21 @@ export default async function editComment(
   const comment = await db.comment.findFirst({
     where: { id: commentId },
   });
-  if (comment) {
-    await db.comment.update({
-      where: { id: commentId },
-      data: {
-        content: text,
-      },
-    });
+
+  const updateComment = await db.comment.update({
+    where: { id: commentId },
+    data: {
+      content: text,
+    },
+  });
+
+  if (!comment || !updateComment) {
     return res
-      .status(200)
-      .json({ success: "comment sucessfully updated", error: undefined });
+      .status(400)
+      .json({ success: undefined, error: "comment not sucessfully updated" });
   }
+
   return res
-    .status(400)
-    .json({ success: undefined, error: "comment not sucessfully updated" });
+    .status(200)
+    .json({ success: "comment sucessfully updated", error: undefined });
 }

@@ -14,14 +14,7 @@ export default async function createPost(
       id: parsedInt,
     },
   });
-  if (user === null) {
-    return res.status(400).json({
-      success: undefined,
-      error: "an error occured while trying to create the post !",
-    });
-  }
-  const index = await algoliaIndex();
-  const c = await db.post.create({
+  const createPost = await db.post.create({
     data: {
       content: content,
       name: title,
@@ -32,21 +25,26 @@ export default async function createPost(
       },
     },
   });
-
+  if (!user || !createPost) {
+    return res.status(400).json({
+      success: undefined,
+      error: "an error occured while trying to create the post !",
+    });
+  }
+  const index = await algoliaIndex();
   index
     .saveObject({
-      ...c,
+      ...createPost,
       comments: 0,
       author: {
         name: user.name,
       },
-      objectID: c.id,
+      objectID: createPost.id,
     })
     .wait();
-
   return res.status(200).json({
     success: "Post created successfully !",
     error: undefined,
-    id: c.id,
+    id: createPost.id,
   });
 }

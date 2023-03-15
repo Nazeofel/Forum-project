@@ -11,15 +11,15 @@ export default async function deletePost(
   const posts = await db.post.findFirst({
     where: { id: id },
   });
-  if (posts) {
-    const index = await algoliaIndex();
-    await db.post.delete({ where: { id: id } });
-    index.deleteObject(id).wait();
+  const deletePost = await db.post.delete({ where: { id: id } });
+  if (!posts || !deletePost) {
     return res
-      .status(200)
-      .json({ success: "post sucessfully deleted", error: undefined });
+      .status(400)
+      .json({ success: undefined, error: "post not sucessfully deleted" });
   }
+  const index = await algoliaIndex();
+  index.deleteObject(id).wait();
   return res
-    .status(400)
-    .json({ success: undefined, error: "post not sucessfully deleted" });
+    .status(200)
+    .json({ success: "post sucessfully deleted", error: undefined });
 }

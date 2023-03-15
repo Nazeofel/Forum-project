@@ -16,7 +16,7 @@ export async function getFileInfo(
         fileId: fileId,
       }),
     });
-    if (!req) {
+    if (!req.ok) {
       throw new Error(
         "an error occured while getting the informations on the file."
       );
@@ -155,13 +155,7 @@ export async function addImageToBucket() {
   let json = null;
   try {
     const auth = await authorization();
-    if (!auth) {
-      throw new Error("Error while trying to get the auth token");
-    }
     const uploadURL = await getUploadUrl(auth.apiUrl, auth.authorizationToken);
-    if (!uploadURL) {
-      throw new Error("Error while trying to get the upload URL");
-    }
     const res = await uploadURL;
     json = res;
   } catch (e) {
