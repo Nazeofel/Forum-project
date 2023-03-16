@@ -75,7 +75,7 @@ export default function Signup({ serverResponse }: serverResponseObject) {
         );
         const form = {
           ...formData,
-          profilPicture: upFile.fileId,
+          profilPicture: `https://f003.backblazeb2.com/file/FORUM-PROFILE-PICTURES/${formData.name}-${formData.profilPicture.name}`,
           deviceID: localFMCValue,
         };
         const base64 = await encodeURL(form);
