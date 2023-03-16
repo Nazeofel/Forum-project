@@ -33,7 +33,7 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
     id: parseInt(params.id as string, 10),
   };
   const posts = await handleApiCalls(
-    `http://localhost:3000/api/fetchPost`,
+    `${process.env.NEXT_PUBLIC_HOST}/api/fetchPost`,
     obj
   );
   const datas = await posts.posts;
@@ -83,7 +83,7 @@ export default function DetailedPost({
         id: postData.id,
       };
       const req = await handleApiCalls(
-        "http://localhost:3000/api/fetchPost",
+        `${process.env.NEXT_PUBLIC_HOST}/api/fetchPost`,
         obj
       );
       const datas = await req.posts;

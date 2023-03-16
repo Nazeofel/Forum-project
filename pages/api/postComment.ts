@@ -27,7 +27,7 @@ export default async function postComment(
   }
   try {
     const reqNotif = await handleApiCalls(
-      "http://localhost:3000/api/sendNotification",
+      `${process.env.NEXT_PUBLIC_HOST}/api/sendNotification`,
       {
         postURL: `/post/${postId}`,
         username: username,

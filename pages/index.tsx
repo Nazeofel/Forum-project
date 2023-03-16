@@ -19,7 +19,7 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
   let tokenData: tokenData = await getTokenData(ctx);
   const params = ctx.query;
   let serverResponse = {};
-  const req = await fetch("http://localhost:3000/api/fetchPosts");
+  const req = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/fetchPosts`);
   if (req.status !== 200) {
     return {
       props: {
@@ -76,13 +76,16 @@ export default function Home({ posts, tokenData, serverResponse }: Props) {
   }, []);
 
   const x = async (username: string, commentContent: string) => {
-    await handleApiCalls("http://localhost:3000/api/sendNotification", {
-      postURL: `/`,
-      username: username,
-      commentContent: commentContent,
-      receiver:
-        "dXzDmUKrAPU5y8wxaCtCB3:APA91bEJGsI-h8Cuw1t48RIwd1ZA2USYXGViZj4ZVIU5I-yFCB9YxG-64uJUELQchOW0X2qVvEO_XwF0TYgGBs3vvq70wIjQpKl3fl76P8kwDIgh0ebWMRshANAlrzTy3dDIYlXwS9jb",
-    });
+    await handleApiCalls(
+      `${process.env.NEXT_PUBLIC_HOST}/api/sendNotification`,
+      {
+        postURL: `/`,
+        username: username,
+        commentContent: commentContent,
+        receiver:
+          "dXzDmUKrAPU5y8wxaCtCB3:APA91bEJGsI-h8Cuw1t48RIwd1ZA2USYXGViZj4ZVIU5I-yFCB9YxG-64uJUELQchOW0X2qVvEO_XwF0TYgGBs3vvq70wIjQpKl3fl76P8kwDIgh0ebWMRshANAlrzTy3dDIYlXwS9jb",
+      }
+    );
   };
 
   useEffect(() => {

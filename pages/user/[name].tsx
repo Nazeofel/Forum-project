@@ -23,7 +23,7 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
     token: tokenData,
   };
   const user = await fetchWrapper(
-    `http://localhost:3000/api/fetchUser`,
+    `${process.env.NEXT_PUBLIC_HOST}/api/fetchUser`,
     payload
   );
   const userData = await user.userInfos;
@@ -112,21 +112,3 @@ export default function ProfilPage({ userData, tokenData }: Props) {
     </div>
   );
 }
-
-/* 
-
-  useEffect(() => {
-    (async () => {
-      if (reFetch === false) return;
-      const obj = {
-        name: userData.name,
-      };
-      const user = await fetchWrapper(
-        "http://localhost:3000/api/fetchUser",
-        obj
-      );
-      const datas = await user.userInfo;
-      setUserData(datas);
-      setRefetch(false);
-    })();
-  }, [reFetch]);*/
