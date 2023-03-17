@@ -20,7 +20,7 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
     case "delete-post":
       {
         const req = await handleApiCalls(
-          "http://localhost:3000/api/deletePost",
+          `${process.env.NEXT_PUBLIC_HOST}/api/deletePost`,
           {
             id: parseInt(id as string, 10),
           }
@@ -36,7 +36,7 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
         if (!formData) return;
         const decodedURL = await decodeURL(formData);
         const req = await handleApiCalls(
-          "http://localhost:3000/api/createPost",
+          `${process.env.NEXT_PUBLIC_HOST}/api/createPost`,
           decodedURL
         );
         if (!req) {
@@ -50,7 +50,7 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
         if (!commentData) return;
         const decodedURL = await decodeURL(commentData);
         const req = await handleApiCalls(
-          "http://localhost:3000/api/postComment",
+          `${process.env.NEXT_PUBLIC_HOST}/api/postComment`,
           decodedURL
         );
         if (!req) {
@@ -64,7 +64,7 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
         if (!commentData) return;
         const decodedURL = await decodeURL(commentData);
         const req = await handleApiCalls(
-          "http://localhost:3000/api/deleteComment",
+          `${process.env.NEXT_PUBLIC_HOST}/api/deleteComment`,
           decodedURL
         );
         if (!req) {
@@ -78,7 +78,7 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
         if (!commentData) return;
         const decodedURL = await decodeURL(commentData);
         const req = await handleApiCalls(
-          "http://localhost:3000/api/editComment",
+          `${process.env.NEXT_PUBLIC_HOST}/api/editComment`,
           decodedURL
         );
         if (!req) {
@@ -92,7 +92,7 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
         if (!postData) return;
         const decodedURL = await decodeURL(postData);
         const req = await handleApiCalls(
-          "http://localhost:3000/api/editPost",
+          `${process.env.NEXT_PUBLIC_HOST}/api/editPost`,
           decodedURL
         );
         if (req) {
@@ -106,7 +106,7 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
         if (!formData) return;
         const decodedURL = await decodeURL(formData);
         const req = await handleApiCalls(
-          "http://localhost:3000/api/signUp",
+          `${process.env.NEXT_PUBLIC_HOST}/api/signUp`,
           decodedURL
         );
         if (!req) {
@@ -120,7 +120,7 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
         if (!formData) return;
         const decodedURL = await decodeURL(formData);
         const req = await handleApiCalls(
-          "http://localhost:3000/api/signIn",
+          `${process.env.NEXT_PUBLIC_HOST}/api/signIn`,
           decodedURL
         );
         if (!req) {

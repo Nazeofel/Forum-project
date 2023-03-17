@@ -36,7 +36,7 @@ export default function App({ Component, pageProps }: AppProps) {
                 const token = await initAppToken();
                 if (pageProps.tokenData) {
                   await handleApiCalls(
-                    "http://localhost:3000/api/updateDeviceID",
+                    `${process.env.NEXT_PUBLIC_HOST}/api/updateDeviceID`,
                     {
                       id: pageProps.tokenData.id,
                       deviceID: token,
