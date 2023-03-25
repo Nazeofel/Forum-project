@@ -41,3 +41,14 @@ export interface signUpForm {
   notifications: 0;
   profilPicture: File;
 }
+
+export interface refinedComment {
+  profilPicture: string;
+  name: string;
+  authorID: number;
+  content: string;
+  createdAt: string;
+  id: number;
+  postID: number;
+  editable: boolean;
+}
