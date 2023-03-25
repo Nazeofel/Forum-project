@@ -1,7 +1,7 @@
 import SectionProfil from "@/components/userProfile/SectionProfil";
 import { getTokenData } from "@/Utils/apiUtils";
 import { fetchWrapper } from "@/Utils/formUtils";
-import { tokenData } from "@/Utils/interfaces";
+import { refinedComment, tokenData } from "@/Utils/interfaces";
 import { User, Post, Comment } from "@prisma/client";
 import type { GetServerSidePropsContext } from "next/types";
 import { useState } from "react";
