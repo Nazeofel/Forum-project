@@ -15,7 +15,16 @@ export default async function fetchUser(
       },
     },
     include: {
-      comments: true,
+      comments: {
+        include: {
+          author: {
+            select: {
+              name: true,
+              id: true,
+            },
+          },
+        },
+      },
       posts: true,
     },
   });

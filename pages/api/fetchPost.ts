@@ -13,6 +13,7 @@ export default async function fetchPost(
       author: {
         select: {
           deviceID: true,
+          profilPicture: true,
         },
       },
       comments: {
