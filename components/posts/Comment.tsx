@@ -8,19 +8,45 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import type { Comment } from "@prisma/client";
+import Link from "next/link";
+import { refinedComment } from "@/Utils/interfaces";
+import Image from "next/image";
 interface Props {
-  postId: number;
   comments: Array<Comment>;
-  userData: Object;
+  userData: Record<string, any>;
 }
 
-export default function Comments({ postId, comments, userData }: Props) {
+export default function Comments({ comments, userData }: Props) {
   const router = useRouter();
-  const [editComment, setEditComment] = useState<boolean>(false);
+  const reComments = [...comments]
+    .reverse()
+    .map((a: any, _: number): refinedComment => {
+      return {
+        authorID: a.author.id,
+        createdAt: a.createdAt,
+        id: a.id,
+        postID: a.post_id,
+        content: a.content,
+        name: a.author.name,
+        profilPicture: a.profilPicture,
+        editable: false,
+      };
+    });
+  const [refinedComments, setRefinedComments] =
+    useState<Array<refinedComment>>(reComments);
   const [commentText, setCommentText] = useState<string>("");
 
-  function handleEditComment(text?: string) {
-    setEditComment((prev) => !prev);
+  function handleEditComment(commentID: number, text?: string) {
+    const refinedArray = refinedComments.map((a: refinedComment, _: number) => {
+      if (a.id === commentID) {
+        return {
+          ...a,
+          editable: !a.editable,
+        };
+      }
+      return a;
+    });
+    setRefinedComments(refinedArray);
     if (!text) return;
     setCommentText(text);
     return;
@@ -28,7 +54,7 @@ export default function Comments({ postId, comments, userData }: Props) {
   return (
     <>
       {comments.length > 0 ? (
-        [...comments].reverse().map((a: any, b: number) => {
+        refinedComments.map((a: refinedComment, b: number) => {
           const regex = /([0-9\-]){10}/g;
           const dateReg = a.createdAt.toString().match(regex);
           return (
@@ -41,19 +67,32 @@ export default function Comments({ postId, comments, userData }: Props) {
                     width: "auto",
                   }}
                 >
-                  <span>
-                    {a.hasOwnProperty("author") ? `${a.author.name},` : ""}{" "}
-                    {dateReg}
-                  </span>
+                  <Link href={`/user/${a.name}`}>
+                    <span
+                      style={{
+                        display: "flex",
+                        gap: "5px",
+                      }}
+                    >
+                      <Image
+                        style={{ borderRadius: "10px", width: "15px" }}
+                        src={a.profilPicture}
+                        width={15}
+                        height={15}
+                        alt={`${a.name} profile-picture`}
+                      />
+                      {a.name}, {dateReg}
+                    </span>
+                  </Link>
                   <div className="actions">
-                    {deletePermission(a.author_id, userData) ? (
+                    {deletePermission(a.authorID, userData) ? (
                       <>
-                        {editComment ? (
+                        {a.editable ? (
                           <FontAwesomeIcon
                             className="trashIcon"
                             icon={faCheck}
                             onClick={async () => {
-                              handleEditComment();
+                              handleEditComment(a.id);
                               if (a.content === commentText) {
                                 return;
                               }
@@ -71,7 +110,7 @@ export default function Comments({ postId, comments, userData }: Props) {
                           <FontAwesomeIcon
                             className="trashIcon"
                             icon={faPencil}
-                            onClick={() => handleEditComment(a.content)}
+                            onClick={() => handleEditComment(a.id, a.content)}
                           />
                         )}
                         <FontAwesomeIcon
@@ -80,7 +119,7 @@ export default function Comments({ postId, comments, userData }: Props) {
                           onClick={async () => {
                             const obj = {
                               id: a.id,
-                              postId: postId,
+                              postId: a.postID,
                             };
                             const base64 = await encodeURL(obj);
                             router.push(
@@ -94,7 +133,7 @@ export default function Comments({ postId, comments, userData }: Props) {
                     )}
                   </div>
                 </div>
-                {editComment ? (
+                {a.editable ? (
                   <input
                     type="text"
                     value={commentText}
