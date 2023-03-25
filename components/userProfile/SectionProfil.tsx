@@ -6,6 +6,7 @@ import { faComment, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { splitStr } from "@/Utils/stringFunctions";
 import { useRouter } from "next/router";
 import Comments from "../posts/Comment";
+import { refinedComment } from "@/Utils/interfaces";
 
 /* 
   Make sure to render things based on the rank ! // DONE
@@ -87,14 +88,11 @@ function PostStyle(props: any) {
   );
 }
 
-function CommentStyle(props: any) {
+function CommentStyle(props: { comments: any; userData: any }) {
+  console.log(props.comments);
   return (
     <>
-      <Comments
-        postId={props.postId}
-        comments={props.comments}
-        userData={props.userData}
-      />
+      <Comments comments={props.comments} userData={props.userData} />
     </>
   );
 }
@@ -107,11 +105,7 @@ export default function SectionProfil(props: any) {
       }
       case "comments": {
         return (
-          <CommentStyle
-            userData={props.userData}
-            postId={props.postId}
-            comments={props.comments}
-          />
+          <CommentStyle userData={props.userData} comments={props.comments} />
         );
       }
       case "posts": {
