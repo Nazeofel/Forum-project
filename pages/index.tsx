@@ -75,19 +75,6 @@ export default function Home({ posts, tokenData, serverResponse }: Props) {
     })();
   }, []);
 
-  const x = async (username: string, commentContent: string) => {
-    await handleApiCalls(
-      `${process.env.NEXT_PUBLIC_HOST}/api/sendNotification`,
-      {
-        postURL: `/`,
-        username: username,
-        commentContent: commentContent,
-        receiver:
-          "dXzDmUKrAPU5y8wxaCtCB3:APA91bEJGsI-h8Cuw1t48RIwd1ZA2USYXGViZj4ZVIU5I-yFCB9YxG-64uJUELQchOW0X2qVvEO_XwF0TYgGBs3vvq70wIjQpKl3fl76P8kwDIgh0ebWMRshANAlrzTy3dDIYlXwS9jb",
-      }
-    );
-  };
-
   useEffect(() => {
     if (searchPosts.length <= 0) {
       setSearchPosts(posts);
@@ -137,22 +124,3 @@ export default function Home({ posts, tokenData, serverResponse }: Props) {
     </>
   );
 }
-
-/* 
-<button
-          onClick={async () => {
-            await x("My username is that", "message from inside the client");
-          }}
-        >
-          client
-        </button>
-        <Link href="/oui/json">lol</Link>
-        <button
-          onClick={async () => {
-            await x("Notification message", "message from outside the client");
-          }}
-        >
-          outside client
-        </button>
-
-*/
