@@ -22,6 +22,7 @@ export default async function fetchPost(
             select: {
               name: true,
               id: true,
+              profilPicture: true,
             },
           },
         },

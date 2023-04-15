@@ -21,6 +21,7 @@ export default async function fetchUser(
             select: {
               name: true,
               id: true,
+              profilPicture: true,
             },
           },
         },

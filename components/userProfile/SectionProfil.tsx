@@ -1,4 +1,4 @@
-import { User } from "@prisma/client";
+import Image from "next/image";
 import Link from "next/link";
 import { deletePermission, encodeURL } from "@/Utils/apiUtils";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -6,7 +6,6 @@ import { faComment, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { splitStr } from "@/Utils/stringFunctions";
 import { useRouter } from "next/router";
 import Comments from "../posts/Comment";
-import { refinedComment } from "@/Utils/interfaces";
 
 /* 
   Make sure to render things based on the rank ! // DONE
@@ -21,10 +20,38 @@ interface Props {
 }
 
 function InfosStyle(props: any) {
-  /*const infosMap = props.data.map((a: User, b: number) => {
-    return <p key={b}>{a.name}</p>;
-  });*/
-  return <>no</>;
+  const { email, name, rank, profilPicture } = props.data;
+  console.log(props);
+  return (
+    <section
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: "20px",
+        alignItems: "center",
+      }}
+    >
+      <Image
+        style={{ borderRadius: "50%" }}
+        src={profilPicture}
+        width={200}
+        height={200}
+        alt={`${name} profile-picture`}
+      />
+      <span className="form-title" style={{ fontSize: "36px" }}>
+        E-mail
+      </span>
+      <p style={{ fontSize: "24px", fontWeight: "500" }}>{email}</p>
+      <span className="form-title" style={{ fontSize: "36px" }}>
+        Name
+      </span>
+      <p style={{ fontSize: "24px", fontWeight: "500" }}>{name}</p>
+      <span className="form-title" style={{ fontSize: "36px" }}>
+        Rank
+      </span>
+      <p style={{ fontSize: "24px", fontWeight: "500" }}>{rank}</p>
+    </section>
+  );
 }
 
 function PostStyle(props: any) {

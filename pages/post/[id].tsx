@@ -69,13 +69,6 @@ export default function DetailedPost({
     username: tokenData.name,
   });
 
-  const refinedComments = postData.comments.map((a: any, _: number) => {
-    return {
-      ...a,
-      profilPicture: postData.author.profilPicture,
-    };
-  });
-
   function handleEditPost(text?: string) {
     setEditPost((prev) => !prev);
     if (!text) return;
@@ -98,6 +91,7 @@ export default function DetailedPost({
       setRefetch(false);
     })();
   }, [reFetch]);
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (reFetch) return;
@@ -253,7 +247,7 @@ export default function DetailedPost({
           )}
 
           <div className="comments-container">
-            <Comments comments={refinedComments} userData={tokenData} />
+            <Comments comments={postData.comments} userData={tokenData} />
           </div>
         </>
       )}

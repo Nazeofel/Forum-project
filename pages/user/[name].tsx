@@ -61,6 +61,7 @@ export default function ProfilPage({ userData, tokenData }: Props) {
     name: userData.name,
     email: userData.email,
     id: userData.id,
+    profilPicture: userData.profilPicture,
     rank: tokenData === null ? null : tokenData.rank,
     tokenId: tokenData === null ? null : tokenData.id,
   };

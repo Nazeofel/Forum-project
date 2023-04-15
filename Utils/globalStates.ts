@@ -9,3 +9,7 @@ export const notifications = atomWithStorage<NotificationObject[]>(
 );
 export const menuAtom = atom(false);
 export const atomPosts = atom<any[]>([]);
+
+/* atom post  ! */
+
+// TRYING RTKQ.

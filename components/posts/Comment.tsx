@@ -28,7 +28,7 @@ export default function Comments({ comments, userData }: Props) {
         postID: a.post_id,
         content: a.content,
         name: a.author.name,
-        profilPicture: a.profilPicture,
+        profilPicture: a.author.profilPicture,
         editable: false,
       };
     });
@@ -57,6 +57,7 @@ export default function Comments({ comments, userData }: Props) {
         refinedComments.map((a: refinedComment, b: number) => {
           const regex = /([0-9\-]){10}/g;
           const dateReg = a.createdAt.toString().match(regex);
+          console.log("comment comp", a);
           return (
             <div className="posts" key={b}>
               <div className="posts-infos">
