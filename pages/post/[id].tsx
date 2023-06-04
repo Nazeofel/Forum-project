@@ -36,6 +36,14 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
     `${process.env.NEXT_PUBLIC_HOST}/api/fetchPost`,
     obj
   );
+  if (!posts) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
   const datas = await posts.posts;
   if (params.serverResponse) {
     await decodeURL(params.serverResponse);
