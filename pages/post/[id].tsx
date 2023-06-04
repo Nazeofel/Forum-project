@@ -51,7 +51,7 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
   }
   return {
     props: {
-      datas,
+      datas: datas ? datas : undefined,
       tokenData,
       serverResponse,
     },
@@ -120,7 +120,7 @@ export default function DetailedPost({
 
   return (
     <>
-      {Object.keys(postData).length <= 0 ? (
+      {Object.keys(postData).length <= 0 || !postData ? (
         <h1>
           404 NO POST EXIST ! Go back to{" "}
           <Link
