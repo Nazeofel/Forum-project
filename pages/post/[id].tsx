@@ -69,12 +69,13 @@ export default function DetailedPost({
   const [editPost, setEditPost] = useState<boolean>(false);
   const [postText, setPostText] = useState<string>("");
   const router = useRouter();
+  console.log(postData);
   const [data, setData] = useState({
-    postId: datas.id,
-    userId: tokenData.id,
+    postId: postData.id,
+    userId: tokenData !== null ? tokenData.id : null,
     content: "",
     receiver: postData.author.deviceID,
-    username: tokenData.name,
+    username: tokenData !== null ? tokenData.name : null,
   });
 
   function handleEditPost(text?: string) {

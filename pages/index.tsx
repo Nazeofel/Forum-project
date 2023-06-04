@@ -5,7 +5,6 @@ import { tokenData } from "@/Utils/interfaces";
 import { serverResponseObject } from "@/Utils/types";
 import { Post } from "@prisma/client";
 import { useAtom } from "jotai";
-import Link from "next/link";
 import type { GetServerSidePropsContext } from "next/types";
 import { useEffect, useState } from "react";
 
@@ -49,7 +48,7 @@ export default function Home({ posts, tokenData, serverResponse }: Props) {
   const [page, setPage] = useState(1);
   const [jwt, setJWTOKEN] = useAtom(jwtoken);
   const [emptyArray, setEmptyArray] = useState<null | []>(null);
-  const getSearchResultsPage = () => {
+  const getSearchResultsPage = (array: Post[] | [] = posts) => {
     if (posts.length <= 0 || page < 1) {
       setPage(1);
       setEmptyArray([]);
@@ -57,8 +56,8 @@ export default function Home({ posts, tokenData, serverResponse }: Props) {
     }
     const start = (page - 1) * 5;
     const end = page * 5;
-    const sliced = posts.slice(start, end);
-    const slicedPred = posts.slice(start + 5, end + 5);
+    const sliced = array.slice(start, end);
+    const slicedPred = array.slice(start + 5, end + 5);
     if (slicedPred.length <= 0) {
       setEmptyArray([]);
     } else {
@@ -98,7 +97,7 @@ export default function Home({ posts, tokenData, serverResponse }: Props) {
         className="pagination-container"
         style={{ display: "flex", justifyContent: "center", gap: "2px" }}
       >
-        {page <= 1 ? (
+        {page <= 1 || searchPosts.length <= 0 ? (
           ""
         ) : (
           <button

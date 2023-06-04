@@ -217,7 +217,7 @@ export default function Signup({ serverResponse }: serverResponseObject) {
               style={{ marginBottom: "30px" }}
               type="file"
               name="profilPicture"
-              onChange={async (e) => {
+              onChange={(e) => {
                 const { files } = e.target;
                 if (!files) return;
                 const filesArray = Array.from(files);

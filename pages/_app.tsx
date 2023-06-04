@@ -23,6 +23,7 @@ App.getInitialProps = async (ctx: GetServerSidePropsContext) => {
 
 export default function App({ Component, pageProps }: AppProps) {
   const [__, setStoredFMC] = useAtom(localFMC);
+  console.log("lamo", pageProps);
   useEffect(() => {
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker
@@ -34,7 +35,7 @@ export default function App({ Component, pageProps }: AppProps) {
             if (permission === "granted") {
               (async () => {
                 const token = await initAppToken();
-                if (pageProps.tokenData) {
+                if (pageProps && pageProps.tokenData) {
                   await handleApiCalls(
                     `${process.env.NEXT_PUBLIC_HOST}/api/updateDeviceID`,
                     {
