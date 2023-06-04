@@ -9,6 +9,7 @@ export const notifications = atomWithStorage<NotificationObject[]>(
 );
 export const menuAtom = atom(false);
 export const atomPosts = atom<any[]>([]);
+export const dbPosts = atom<any[]>([]);
 
 /* atom post  ! */
 

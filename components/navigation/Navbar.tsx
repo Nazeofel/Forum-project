@@ -1,11 +1,12 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faBell, faBellSlash } from "@fortawesome/free-solid-svg-icons";
-import { useAtom } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import {
   jwtoken,
   menuAtom,
   atomPosts,
   notifications,
+  dbPosts,
 } from "@/Utils/globalStates";
 import { useEffect, useState } from "react";
 import { useDebounce } from "@/Utils/customHooks";
@@ -20,6 +21,7 @@ export default function Navbar() {
   const [showMenu, setShowMenu] = useAtom(menuAtom);
   const [token, setJWTOKEN] = useAtom(jwtoken);
   const [_, setSearchPosts] = useAtom(atomPosts);
+  const savedDbPosts = useAtomValue(dbPosts);
   const [searchBoolean, setSearchBoolean] = useState<boolean>(false);
   const [searchBarInput, setSearchBarInput] = useState<string>();
   const [localStorageNotifications, setLocalStorageNotifications] =
@@ -46,7 +48,7 @@ export default function Navbar() {
 
   useEffect(() => {
     (async () => {
-      if (!searchBoolean) return;
+      if (!searchBoolean || savedDbPosts.length <= 0) return;
       const search = await searchIndex(debouncedValue, "posts");
       setSearchPosts(search);
     })();

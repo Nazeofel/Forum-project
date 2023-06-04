@@ -1,6 +1,11 @@
 import Posts from "@/components/posts/Posts";
 import { decodeURL, getTokenData, handleApiCalls } from "@/Utils/apiUtils";
-import { atomPosts, jwtoken, notifications } from "@/Utils/globalStates";
+import {
+  atomPosts,
+  dbPosts,
+  jwtoken,
+  notifications,
+} from "@/Utils/globalStates";
 import { tokenData } from "@/Utils/interfaces";
 import { serverResponseObject } from "@/Utils/types";
 import { Post } from "@prisma/client";
@@ -45,6 +50,7 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
 
 export default function Home({ posts, tokenData, serverResponse }: Props) {
   const [searchPosts, setSearchPosts] = useAtom(atomPosts);
+  const [searchdbPosts, setDbPosts] = useAtom(dbPosts);
   const [page, setPage] = useState(1);
   const [jwt, setJWTOKEN] = useAtom(jwtoken);
   const [emptyArray, setEmptyArray] = useState<null | []>(null);
@@ -75,6 +81,7 @@ export default function Home({ posts, tokenData, serverResponse }: Props) {
   }, []);
 
   useEffect(() => {
+    setDbPosts(posts);
     if (searchPosts.length <= 0) {
       setSearchPosts(posts);
       getSearchResultsPage();
@@ -107,7 +114,11 @@ export default function Home({ posts, tokenData, serverResponse }: Props) {
             {page - 1}
           </button>
         )}
-        <button className="pagination-button">{page}</button>
+        {posts.length <= 0 ? (
+          ""
+        ) : (
+          <button className="pagination-button">{page}</button>
+        )}
         {emptyArray === null ? (
           <button
             className="pagination-button"
