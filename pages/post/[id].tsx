@@ -36,7 +36,7 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
     `${process.env.NEXT_PUBLIC_HOST}/api/fetchPost`,
     obj
   );
-  if (!posts) {
+  if (Object.keys(posts.posts).length <= 0) {
     return {
       redirect: {
         destination: "/",
@@ -74,10 +74,9 @@ export default function DetailedPost({
     postId: postData.id,
     userId: tokenData !== null ? tokenData.id : null,
     content: "",
-    receiver: postData.author.deviceID,
+    receiver: Object.keys(postData).length <= 0 ? "" : postData.author.deviceID,
     username: tokenData !== null ? tokenData.name : null,
   });
-
   function handleEditPost(text?: string) {
     setEditPost((prev) => !prev);
     if (!text) return;
