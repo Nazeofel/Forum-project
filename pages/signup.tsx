@@ -46,7 +46,7 @@ export default function Signup({ serverResponse }: serverResponseObject) {
     notifications: 0,
     profilPicture: {} as File,
   });
-
+  const [loader, setLoader] = useState<boolean>(false);
   const [clientErrors, setClientErrors] = useState<any | null>(null);
   const localFMCValue = useAtomValue(localFMC);
   async function handleSubmit(event: React.FormEvent) {
@@ -58,6 +58,7 @@ export default function Signup({ serverResponse }: serverResponseObject) {
       return;
     } else {
       setClientErrors(null);
+      setLoader(true);
       try {
         const req = await fetch(
           `${process.env.NEXT_PUBLIC_HOST}/api/backBlaze`,
@@ -84,10 +85,14 @@ export default function Signup({ serverResponse }: serverResponseObject) {
         router.push(`/action/sign-up?formData=${base64}`);
       } catch (e) {
         if (e instanceof Error) {
+          setLoader(false);
           return console.log(e.message);
         }
       }
     }
+  }
+  if (loader) {
+    return <h1 style={{ textAlign: "center" }}>Creating the account...</h1>;
   }
   return (
     <>
