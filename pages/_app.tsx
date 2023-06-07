@@ -23,7 +23,6 @@ App.getInitialProps = async (ctx: GetServerSidePropsContext) => {
 
 export default function App({ Component, pageProps }: AppProps) {
   const [__, setStoredFMC] = useAtom(localFMC);
-  console.log("lamo", pageProps);
   useEffect(() => {
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker
