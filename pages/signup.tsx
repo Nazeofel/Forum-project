@@ -49,7 +49,6 @@ export default function Signup({ serverResponse }: serverResponseObject) {
 
   const [clientErrors, setClientErrors] = useState<any | null>(null);
   const localFMCValue = useAtomValue(localFMC);
-  console.log(formData.profilPicture);
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
     const sufInfos = await signUpFormInformations(formData);
@@ -79,7 +78,7 @@ export default function Signup({ serverResponse }: serverResponseObject) {
         const form = {
           ...formData,
           profilPicture: `https://f003.backblazeb2.com/file/FORUM-PROFILE-PICTURES/${formData.name}-${formData.profilPicture.name}`,
-          deviceID: localFMCValue,
+          deviceID: localFMCValue ? localFMCValue : "",
         };
         const base64 = await encodeURL(form);
         router.push(`/action/sign-up?formData=${base64}`);
