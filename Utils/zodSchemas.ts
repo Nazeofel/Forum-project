@@ -114,8 +114,8 @@ export const signUpFormInformations = async (
     }),
     profilPicture: z
       .instanceof(File)
-      .refine((f) => f.size <= 50000, {
-        message: "File size too big ! max 5mo.",
+      .refine((f) => f.size <= 500000, {
+        message: "File size too big ! max 5mb.",
       })
       .refine((f) => ARRAY_TYPES.includes(f.type), {
         message: "Only JPG, PNG, JPEG images format are supported",
