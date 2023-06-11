@@ -114,7 +114,7 @@ export const signUpFormInformations = async (
     }),
     profilPicture: z
       .instanceof(File)
-      .refine((f) => f.size <= 5000000, {
+      .refine((f) => f.size <= 5242880, {
         message: "File size too big ! max 5mb.",
       })
       .refine((f) => ARRAY_TYPES.includes(f.type), {
