@@ -82,7 +82,9 @@ export default function Navbar() {
       <header>
         <nav>
           {router.pathname !== "/" ? (
-            <Link href="/">Home</Link>
+            <Link href="/" onClick={handleMenu}>
+              Home
+            </Link>
           ) : (
             <input
               type="search"
