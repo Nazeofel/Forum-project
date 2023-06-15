@@ -91,9 +91,18 @@ export default function Home({ posts, tokenData, serverResponse }: Props) {
 
   return (
     <>
-      <div className="post-container">
+      <div
+        className="post-container"
+        style={{ justifyContent: searchPosts.length >= 1 ? "unset" : "center" }}
+      >
         <Posts tokenData={tokenData} />
-        {serverResponse.success ? <h1>Post correctly deleted !</h1> : ""}
+        {serverResponse.success ? (
+          <h1 className="success" style={{ textAlign: "center" }}>
+            Post correctly deleted !
+          </h1>
+        ) : (
+          ""
+        )}
         {serverResponse.error ? (
           <h1>An error occured while trying to delete the post !</h1>
         ) : (
