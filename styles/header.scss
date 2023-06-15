@@ -10,6 +10,13 @@ header {
     width: 90%;
     margin-inline: auto;
     height: 50px;
+    > a {
+      margin-right: auto;
+      font-size: clamp(50px, 1vw, 2vw);
+      font-weight: bold;
+
+      color: $greyish;
+    }
     > input {
       background: #ffffff;
       border-radius: 10px;
