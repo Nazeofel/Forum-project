@@ -5,10 +5,10 @@
 @import "form.scss";
 @import "posts.scss";
 @import "profil.scss";
-
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;500;900&display=swap");
 body {
   background-color: rgba(217, 217, 217, 0.7);
-  font-family: "inter";
+  font-family: "Roboto", sans-serif;
 }
 
 /*Utility classes */
