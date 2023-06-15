@@ -27,9 +27,6 @@ export default function NavigationMenu({
         </>
       ) : (
         <>
-          <Link className="link-animation" href="/" onClick={handleMenu}>
-            Home Page
-          </Link>
           <Link
             className="link-animation"
             href="/createpost"
