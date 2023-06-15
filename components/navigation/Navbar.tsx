@@ -16,6 +16,8 @@ import { NotificationObject } from "@/Utils/interfaces";
 import NotificationBox from "./NotificationBox";
 import NavigationMenu from "./NavigationMenu";
 import BellComponent from "./BellComponent";
+import { useRouter } from "next/router";
+import Link from "next/link";
 
 export default function Navbar() {
   const [showMenu, setShowMenu] = useAtom(menuAtom);
@@ -28,6 +30,7 @@ export default function Navbar() {
     useAtom(notifications);
   const [showNotification, setShowNotification] = useState<boolean>(false);
   const debouncedValue = useDebounce(searchBarInput, 500);
+  const router = useRouter();
   function handleMenu() {
     setShowMenu(false);
   }
@@ -78,14 +81,18 @@ export default function Navbar() {
     <>
       <header>
         <nav>
-          <input
-            type="search"
-            placeholder="Search for a post"
-            onChange={(e) => {
-              setSearchBoolean(true);
-              setSearchBarInput(e.currentTarget.value);
-            }}
-          />
+          {router.pathname !== "/" ? (
+            <Link href="/">Home</Link>
+          ) : (
+            <input
+              type="search"
+              placeholder="Search for a post"
+              onChange={(e) => {
+                setSearchBoolean(true);
+                setSearchBarInput(e.currentTarget.value);
+              }}
+            />
+          )}
           <NavigationMenu
             showMenu={showMenu}
             handleMenu={handleMenu}
