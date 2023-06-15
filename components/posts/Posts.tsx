@@ -63,7 +63,14 @@ export default function Posts({ tokenData }: Props) {
           );
         })
       ) : (
-        <h1>No posts !</h1>
+        <h1
+          style={{
+            textAlign: "center",
+            fontSize: "clamp(1vw, 3vw, 5vw)",
+          }}
+        >
+          Nothing has been posted yet !
+        </h1>
       )}
     </>
   );
